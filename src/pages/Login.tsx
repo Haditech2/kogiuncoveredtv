@@ -96,9 +96,6 @@ const Login: React.FC = () => {
               </CardFooter>
             </form>
           </Card>
-          <div className="mt-4 text-center text-sm text-muted-foreground">
-            <p>For demo purposes, use: admin / admin123</p>
-          </div>
         </div>
       </main>
       <Footer />

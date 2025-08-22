@@ -23,8 +23,8 @@ export const useAuth = () => {
   return context;
 };
 
-// Mock admin credentials - in a real app, this would be handled by a backend
-const ADMIN_USERNAME = 'admin';
+// Admin credentials
+const ADMIN_USERNAME = 'kogiuncovered';
 const ADMIN_PASSWORD = 'admin123';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
