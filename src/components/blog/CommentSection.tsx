@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { Comment } from '@/contexts/BlogContext';
+import { Link } from 'react-router-dom';
 
 interface CommentSectionProps {
   postId: string;
@@ -87,9 +88,9 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         <div className="text-center py-4 border rounded-lg bg-gray-50">
           <p className="text-gray-600">
             Please{' '}
-            <a href="/login" className="text-[#5E936C] hover:underline font-medium">
+            <Link to="/login" className="text-[#5E936C] hover:underline font-medium">
               sign in
-            </a>{' '}
+            </Link>{' '}
             to leave a comment.
           </p>
         </div>

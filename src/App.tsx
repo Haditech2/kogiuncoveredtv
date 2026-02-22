@@ -52,6 +52,8 @@ const App = () => (
                 <Route path="/search" element={<Layout><SearchResults /></Layout>} />
                 <Route path="/create-post" element={<ProtectedRoute adminOnly={true}><Layout><CreatePost /></Layout></ProtectedRoute>} />
                 <Route path="/edit-post/:postId" element={<ProtectedRoute adminOnly={true}><Layout><EditPost /></Layout></ProtectedRoute>} />
+                <Route path="/404" element={<Layout><NotFound /></Layout>} />
+                <Route path="/not-found" element={<Layout><NotFound /></Layout>} />
                 <Route path="*" element={<Layout><NotFound /></Layout>} />
               </Routes>
             </TooltipProvider>
