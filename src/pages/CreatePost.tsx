@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { BlogHeader } from '@/components/blog/BlogHeader';
-import { Footer } from '@/components/blog/Footer';
+
 import RichTextEditor from '@/components/blog/RichTextEditor';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +9,6 @@ import { X, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useBlog } from '@/contexts/BlogContext';
-import { v4 as uuidv4 } from 'uuid';
 import ImageUpload from '@/components/ui/ImageUpload';
 
 const CreatePost: React.FC = () => {
@@ -44,7 +42,7 @@ const CreatePost: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title || !content || !excerpt) {
       toast({
         title: 'Missing fields',
@@ -53,32 +51,19 @@ const CreatePost: React.FC = () => {
       });
       return;
     }
-    
-    // Create a slug from the title
-    const slug = title.toLowerCase()
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .concat('-', uuidv4().slice(0, 8)); // Add a unique identifier
-    
-    // Add the post to our context
-    const newPost = {
+
+    // Add the post to our context (id, date, slug are set by BlogContext)
+    addPost({
       title,
       excerpt,
       content,
       author: 'Current User',
+      authorId: '1',
       readTime: `${Math.max(1, Math.ceil(content.length / 1000))} min read`,
       tags: tags.length > 0 ? tags : ['Uncategorized'],
       imageUrl: featuredImage || 'https://source.unsplash.com/random/800x600/?blog',
-      slug,
-      date: new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-    };
-    
-    addPost(newPost);
-    
+    });
+
     toast({
       title: 'Success!',
       description: 'Your post has been published',
@@ -87,10 +72,8 @@ const CreatePost: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <BlogHeader />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4">Create New Post</h1>
           <p className="text-lg text-muted-foreground">
             Share your knowledge and insights with the world.
@@ -184,7 +167,7 @@ const CreatePost: React.FC = () => {
         </form>
       </main>
       <Footer />
-    </div>
+    </div >
   );
 };
 

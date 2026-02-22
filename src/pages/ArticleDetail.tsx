@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import BlogHeader from '@/components/blog/BlogHeader';
 import { ArticleContent } from '@/components/blog/ArticleContent';
 import { useBlog } from '@/contexts/BlogContext';
 

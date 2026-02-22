@@ -7,17 +7,33 @@
 
 @layer base {
   :root {
-    --color-primary: #4f46e5;
-    --color-secondary: #7c3aed;
-    --color-accent: #ec4899;
-    --color-success: #10b981;
+    /* Brand palette: Deep Emerald + Golden Amber */
+    --color-primary: #1a7a4a;
+    --color-secondary: #1e9e5e;
+    --color-accent: #f59e0b;
+    --color-accent-hot: #ef4444;
+    --color-success: #22c55e;
     --color-warning: #f59e0b;
     --color-danger: #ef4444;
+    --color-gold: #d97706;
   }
   
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
+  }
+
+  @keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.1); }
+    66% { transform: translate(-15px, 15px) scale(0.9); }
+  }
+
+  .animate-blob {
+    animation: blob 8s ease-in-out infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
   }
 }
 
@@ -97,27 +113,33 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-400 dark:bg-gray-600 rounded-full;
+    background: linear-gradient(to bottom, #1a7a4a, #d97706);
+    border-radius: 9999px;
     transition: background-color 0.2s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-indigo-500 dark:bg-pink-500;
+    background: linear-gradient(to bottom, #1e9e5e, #f59e0b);
   }
   
-  /* Gradient text */
+  /* Gradient text — Emerald to Gold */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+    background: linear-gradient(135deg, #1a7a4a 0%, #1e9e5e 45%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   
   /* Card styles */
   .card {
-    @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm;
+    @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm;
     transition: all 0.3s ease;
   }
   
   .card:hover {
-    @apply shadow-lg -translate-y-1 border-primary/30 dark:border-primary/50;
+    box-shadow: 0 20px 40px -10px rgba(26, 122, 74, 0.18), 0 4px 16px -4px rgba(217, 119, 6, 0.12);
+    transform: translateY(-4px);
+    @apply border-emerald-300 dark:border-emerald-700;
   }
   
   .card-header {
@@ -129,99 +151,125 @@
   }
 
   .hover\:scale-102 {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 dark:shadow-primary/10 hover:-translate-y-1;
+    @apply transition-all duration-300 hover:-translate-y-1;
+    box-shadow: 0 4px 14px rgba(26, 122, 74, 0.15);
   }
   
   /* Button hover effect */
   .btn-hover {
-    @apply transition-all duration-300 hover:shadow-md hover:shadow-primary/30 transform hover:-translate-y-0.5;
+    @apply transition-all duration-300 transform hover:-translate-y-0.5;
+    box-shadow: 0 4px 14px rgba(26, 122, 74, 0.25);
+  }
+  .btn-hover:hover {
+    box-shadow: 0 8px 24px rgba(26, 122, 74, 0.38);
   }
   
   /* Input focus effect */
   .input-focus {
-    @apply focus:ring-2 focus:ring-primary/50 focus:border-primary/70 transition-all duration-200;
+    @apply focus:ring-2 transition-all duration-200;
+    --tw-ring-color: rgba(26, 122, 74, 0.4);
+  }
+
+  /* Gold shimmer accent line */
+  .accent-line {
+    height: 3px;
+    background: linear-gradient(90deg, #1a7a4a, #d97706, #1a7a4a);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 }
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    /* Emerald green primary */
+    --background: 150 30% 97%;
+    --foreground: 158 60% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 158 60% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 158 60% 8%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    /* Deep Emerald */
+    --primary: 152 64% 28%;
+    --primary-foreground: 150 100% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Soft Sage */
+    --secondary: 152 30% 92%;
+    --secondary-foreground: 152 50% 18%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Soft grey-green muted */
+    --muted: 152 20% 94%;
+    --muted-foreground: 152 15% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Gold accent */
+    --accent: 38 92% 50%;
+    --accent-foreground: 38 100% 10%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --border: 152 20% 86%;
+    --input: 152 20% 86%;
+    --ring: 152 64% 28%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
-    --sidebar-background: 220 23% 95%;
-    --sidebar-foreground: 215 25% 27%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-background: 152 28% 94%;
+    --sidebar-foreground: 152 40% 18%;
+    --sidebar-primary: 152 64% 28%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 90%;
-    --sidebar-accent-foreground: 215 25% 27%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-accent: 152 20% 88%;
+    --sidebar-accent-foreground: 152 40% 18%;
+    --sidebar-border: 152 18% 86%;
+    --sidebar-ring: 152 64% 28%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 160 30% 6%;
+    --foreground: 152 20% 94%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 160 28% 9%;
+    --card-foreground: 152 20% 94%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 160 28% 9%;
+    --popover-foreground: 152 20% 94%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Brighter emerald for dark */
+    --primary: 152 72% 42%;
+    --primary-foreground: 160 30% 6%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 160 25% 16%;
+    --secondary-foreground: 152 20% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 160 20% 14%;
+    --muted-foreground: 152 15% 60%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Gold stays vivid in dark */
+    --accent: 38 95% 55%;
+    --accent-foreground: 38 100% 8%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 42%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 160 20% 18%;
+    --input: 160 20% 18%;
+    --ring: 152 72% 42%;
 
-    --sidebar-background: 215 28% 17%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-background: 160 28% 10%;
+    --sidebar-foreground: 152 20% 90%;
+    --sidebar-primary: 152 72% 42%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 27%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 25% 27%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 160 22% 18%;
+    --sidebar-accent-foreground: 152 20% 90%;
+    --sidebar-border: 160 22% 18%;
+    --sidebar-ring: 152 72% 42%;
   }
 }
 
@@ -244,7 +292,7 @@
 }
 
 .markdown-preview {
-  @apply prose max-w-none prose-blue dark:prose-invert;
+  @apply prose max-w-none prose-emerald dark:prose-invert;
 }
 
 .markdown-preview pre {

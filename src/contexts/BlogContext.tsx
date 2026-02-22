@@ -207,9 +207,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }));
   });
 
-  // Save posts to localStorage whenever they change
+  // Save posts to localStorage whenever they change (use same key as initial load)
   useEffect(() => {
-    localStorage.setItem('blog-posts', JSON.stringify(posts));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('blogPosts', JSON.stringify(posts));
+    }
   }, [posts]);
 
   const addPost = (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => {
@@ -217,12 +219,15 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '-')
-      .replace(/--+/g, '-');
+      .replace(/--+/g, '-')
+      .replace(/^-|-$/g, '')
+      .concat('-', uuidv4().slice(0, 8));
 
     const newPost: BlogPost = {
       ...post,
+      authorId: post.authorId || '1',
       id: uuidv4(),
-      date: new Date().toISOString(),
+      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       slug,
       likes: [],
       comments: [],

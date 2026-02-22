@@ -6,9 +6,11 @@ import { useBlog } from '@/contexts/BlogContext';
 
 export const ArticleGrid: React.FC = () => {
   const { posts } = useBlog();
-  
-  console.log('ArticleGrid - posts:', posts);
-  
+
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.length === 0 ? (
@@ -17,7 +19,7 @@ export const ArticleGrid: React.FC = () => {
           <p className="text-muted-foreground mt-2">Be the first to create a post!</p>
         </div>
       ) : (
-        posts.map((article) => (
+        sortedPosts.map((article) => (
           <BlogCard
             key={article.id}
             post={article}

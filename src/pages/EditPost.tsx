@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BlogHeader } from '@/components/blog/BlogHeader';
-import { Footer } from '@/components/blog/Footer';
+
 import RichTextEditor from '@/components/blog/RichTextEditor';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBlog } from '@/contexts/BlogContext';
 import ImageUpload from '@/components/ui/ImageUpload';
+import { Footer } from '@/components/blog/Footer';
 
 const EditPost: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -65,7 +65,7 @@ const EditPost: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title || !content || !excerpt) {
       toast({
         title: 'Missing fields',
@@ -74,7 +74,7 @@ const EditPost: React.FC = () => {
       });
       return;
     }
-    
+
     if (postId) {
       // Update the post
       editPost(postId, {
@@ -84,7 +84,7 @@ const EditPost: React.FC = () => {
         tags: tags.length > 0 ? tags : ['Uncategorized'],
         imageUrl: featuredImage
       });
-      
+
       toast({
         title: 'Success!',
         description: 'The post has been updated',
@@ -94,10 +94,8 @@ const EditPost: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <BlogHeader />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4">Edit Post</h1>
           <p className="text-lg text-muted-foreground">
             Update your post content and details.
@@ -190,7 +188,6 @@ const EditPost: React.FC = () => {
             <Button type="submit">Update Post</Button>
           </div>
         </form>
-      </main>
       <Footer />
     </div>
   );

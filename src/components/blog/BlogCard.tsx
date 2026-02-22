@@ -20,9 +20,9 @@ interface BlogCardProps {
 }
 
 const variants: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 20 
+  hidden: {
+    opacity: 0,
+    y: 20
   },
   visible: (i: number = 0) => ({
     opacity: 1,
@@ -36,8 +36,8 @@ const variants: Variants = {
   }),
   hover: {
     scale: 1.03,
-    transition: { 
-      duration: 0.2, 
+    transition: {
+      duration: 0.2,
       ease: [0.4, 0, 0.2, 1] // Using cubic-bezier values for smoother animation
     }
   }
@@ -46,18 +46,25 @@ const variants: Variants = {
 export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index = 0 }) => {
   // Generate a random color for the tag
   const tagColors = [
-    'bg-blue-500 text-white hover:bg-blue-600',
-    'bg-purple-600 text-white hover:bg-purple-700',
-    'bg-pink-500 text-white hover:bg-pink-600',
-    'bg-indigo-500 text-white hover:bg-indigo-600',
-    'bg-teal-500 text-white hover:bg-teal-600',
+    'text-white',           // emerald
+    'text-white',           // green
+    'text-white',           // amber
+    'text-white',           // teal-green
+    'text-white',           // deep green
+  ];
+  const tagGradients = [
+    'linear-gradient(135deg, #1a7a4a, #1e9e5e)',
+    'linear-gradient(135deg, #15803d, #16a34a)',
+    'linear-gradient(135deg, #d97706, #f59e0b)',
+    'linear-gradient(135deg, #0f766e, #14b8a6)',
+    'linear-gradient(135deg, #0f5c2e, #1a7a4a)',
   ];
 
-  const getRandomColor = (str: string) => {
+  const getTagGradient = (str: string) => {
     const hash = str.split('').reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc);
     }, 0);
-    return tagColors[Math.abs(hash) % tagColors.length];
+    return tagGradients[Math.abs(hash) % tagGradients.length];
   };
 
   // Handle both post object and individual props
@@ -91,14 +98,14 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
       initial="hidden"
       animate="visible"
       whileHover="hover"
-      className={`group relative overflow-hidden rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}
+      className={`group relative overflow-hidden rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-emerald-400 dark:hover:border-emerald-600 ${className}`}
     >
       <Link to={`/articles/${articleSlug}`} className="block">
         {/* Image with overlay */}
         <div className="relative aspect-video overflow-hidden bg-gray-100 dark:bg-gray-800">
           <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-          <img 
-            src={articleImageUrl} 
+          <img
+            src={articleImageUrl}
             alt={articleTitle}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
@@ -112,8 +119,9 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
               {Array.isArray(articleTags) && articleTags.map((tag) => (
                 <motion.span
                   key={tag}
-                  className={`text-xs font-medium px-3 py-1.5 rounded-full shadow-sm ${getRandomColor(tag)} transition-colors duration-200`}
-                  whileHover={{ 
+                  className="text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm text-white"
+                  style={{ background: getTagGradient(tag) }}
+                  whileHover={{
                     scale: 1.1,
                     transition: { duration: 0.2 }
                   }}
@@ -124,7 +132,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
             </div>
           </div>
         </div>
-        
+
         {/* Content */}
         <div className="p-6">
           <div className="flex items-center text-sm text-muted-foreground mb-3">
@@ -137,19 +145,19 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
               {articleReadTime}
             </span>
           </div>
-          
+
           <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
             {articleTitle}
           </h3>
-          
+
           <p className="text-muted-foreground mb-5 line-clamp-2">{articleExcerpt}</p>
-          
+
           <div className="flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform duration-300">
             Read more
             <ArrowRight className="ml-2 w-4 h-4" />
           </div>
         </div>
-        
+
         {/* Hover effect */}
         <div className="absolute inset-0 border-2 border-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"></div>
       </Link>

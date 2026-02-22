@@ -20,13 +20,17 @@ const container: Variants = {
   }
 };
 
-const BlogGrid: React.FC<BlogGridProps> = ({ 
-  className = '', 
-  loading = false, 
-  maxPosts = 3 
+const BlogGrid: React.FC<BlogGridProps> = ({
+  className = '',
+  loading = false,
+  maxPosts = 3,
 }) => {
   const { posts } = useBlog();
-  const displayedPosts = posts.slice(0, maxPosts);
+
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  const displayedPosts = sortedPosts.slice(0, maxPosts);
 
   // Skeleton loading state
   if (loading) {
