@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useBlog } from '@/contexts/BlogContext';
 import ImageUpload from '@/components/ui/ImageUpload';
+import { Footer } from '@/components/blog/Footer';
 
 const CreatePost: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -165,9 +166,8 @@ const CreatePost: React.FC = () => {
             <Button type="submit">Publish Post</Button>
           </div>
         </form>
-      </main>
       <Footer />
-    </div >
+    </div>
   );
 };
 
