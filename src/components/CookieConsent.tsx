@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const COOKIE_CONSENT_KEY = 'kogiuncovered_cookie_consent';
@@ -34,9 +33,9 @@ export const CookieConsent: React.FC = () => {
         <p className="text-sm text-muted-foreground flex-1">
           We use cookies and similar technologies for analytics and to display ads (including Google AdSense).
           By continuing, you accept our{' '}
-          <Link to="/privacy" className="text-primary hover:underline font-medium">Privacy Policy</Link>
+          <a href="/privacy" className="text-primary hover:underline font-medium">Privacy Policy</a>
           {' '}and{' '}
-          <Link to="/terms" className="text-primary hover:underline font-medium">Terms of Service</Link>.
+          <a href="/terms" className="text-primary hover:underline font-medium">Terms of Service</a>.
         </p>
         <div className="flex items-center gap-2 shrink-0">
           <Button variant="outline" size="sm" onClick={handleDecline}>

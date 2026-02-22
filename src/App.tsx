@@ -26,20 +26,20 @@ import TermsOfService from "./pages/TermsOfService";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider defaultTheme="light">
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BlogProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <CookieConsent />
-            <BrowserRouter
-              future={{
-                v7_startTransition: true,
-                v7_relativeSplatPath: true,
-              }}
-            >
+  <BrowserRouter
+    future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    }}
+  >
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <BlogProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <CookieConsent />
               <Routes>
                 <Route path="/" element={<Layout><Index /></Layout>} />
                 <Route path="/articles" element={<Layout><Articles /></Layout>} />
@@ -54,12 +54,12 @@ const App = () => (
                 <Route path="/edit-post/:postId" element={<ProtectedRoute adminOnly={true}><Layout><EditPost /></Layout></ProtectedRoute>} />
                 <Route path="*" element={<Layout><NotFound /></Layout>} />
               </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </BlogProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </ThemeProvider>
+            </TooltipProvider>
+          </BlogProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  </BrowserRouter>
 );
 
 export default App;
