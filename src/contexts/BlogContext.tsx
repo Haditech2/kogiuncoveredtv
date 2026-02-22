@@ -196,15 +196,20 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [posts, setPosts] = useState<BlogPost[]>(() => {
     // Load posts from localStorage or use initial posts
     const savedPosts = typeof window !== 'undefined' ? localStorage.getItem('blogPosts') : null;
-    const parsedPosts = savedPosts ? JSON.parse(savedPosts) : initialPosts;
+    const parsedPosts: unknown = savedPosts ? JSON.parse(savedPosts) : initialPosts;
+    const postsToNormalize = Array.isArray(parsedPosts) ? parsedPosts : initialPosts;
     
     // Ensure all posts have likes and comments arrays
-    return parsedPosts.map((post: any) => ({
-      ...post,
-      likes: post.likes || [],
-      comments: post.comments || [],
-      authorId: post.authorId || '1' // Default author ID
-    }));
+    return postsToNormalize.map((post) => {
+      const normalizedPost = post as Partial<BlogPost>;
+
+      return {
+        ...normalizedPost,
+        likes: normalizedPost.likes || [],
+        comments: normalizedPost.comments || [],
+        authorId: normalizedPost.authorId || '1' // Default author ID
+      } as BlogPost;
+    });
   });
 
   // Save posts to localStorage whenever they change (use same key as initial load)

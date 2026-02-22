@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { useBlog } from '@/contexts/BlogContext';
 import { useNavigate } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,15 +23,15 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-12">
-      <form onSubmit={handleSearch} className="relative">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+    <div className="mx-auto mb-12 w-full max-w-3xl">
+      <form onSubmit={handleSearch} className="flex flex-col gap-3 rounded-xl border bg-card p-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <Search className="h-4 w-4 text-muted-foreground" />
           </div>
-          <input
+          <Input
             type="text"
-            className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+            className="h-11 border-0 bg-background pl-9 pr-10 focus-visible:ring-1"
             placeholder="Search articles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -40,18 +42,15 @@ const SearchBar: React.FC = () => {
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground transition-colors hover:text-foreground"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           )}
         </div>
-        <button
-          type="submit"
-          className="mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200"
-        >
+        <Button type="submit" className="h-11 px-6 sm:w-auto" disabled={!searchQuery.trim()}>
           Search
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 
 const About: React.FC = () => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">About Kogiuncovered</h1>
+      <div className="mx-auto max-w-4xl">
+        <h1 className="mb-8 text-4xl font-bold tracking-tight">About Kogiuncovered</h1>
 
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg max-w-none rounded-xl border bg-card p-6">
           <p className="text-xl text-muted-foreground mb-8">
             Welcome to Kogiuncovered, your trusted source for news, stories, and insights from Kogi State and beyond.
           </p>
@@ -37,7 +36,7 @@ const About: React.FC = () => {
           <h2 className="text-2xl font-semibold mt-8 mb-4">Get In Touch</h2>
           <p>
             Have questions or suggestions? We'd love to hear from you! Reach out to us at
-            <br /><a href="mailto:kogiuncoveredtv@gmail.com" className="hover:underline" style={{ color: '#1a7a4a' }}>
+            <br /><a href="mailto:kogiuncoveredtv@gmail.com" className="text-primary hover:underline">
               kogiuncoveredtv@gmail.com
             </a>
           </p>

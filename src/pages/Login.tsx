@@ -65,9 +65,6 @@ const Login: React.FC = () => {
               <CardDescription>
                 Please sign in with your admin credentials to access the blog management features.
               </CardDescription>
-              <p className="text-xs text-muted-foreground mt-2">
-                Demo: username <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono">kogiuncovered</kbd>, password <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono">admin123</kbd>
-              </p>
             </CardHeader>
             <form onSubmit={handleSubmit}>
               <CardContent className="space-y-4">

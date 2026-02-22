@@ -4,9 +4,9 @@ import AdSlot from '@/components/ads/AdSlot';
 
 const Articles: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">All Articles</h1>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="mb-8 rounded-xl border bg-card p-6">
+        <h1 className="mb-3 text-4xl font-bold tracking-tight">All Articles</h1>
         <p className="text-lg text-muted-foreground">
           Discover our complete collection of articles covering web development, design, and technology.
         </p>

@@ -7,185 +7,6 @@
 
 @layer base {
   :root {
-    /* Brand palette: Deep Emerald + Golden Amber */
-    --color-primary: #1a7a4a;
-    --color-secondary: #1e9e5e;
-    --color-accent: #f59e0b;
-    --color-accent-hot: #ef4444;
-    --color-success: #22c55e;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
-    --color-gold: #d97706;
-  }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-  }
-
-  @keyframes blob {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -20px) scale(1.1); }
-    66% { transform: translate(-15px, 15px) scale(0.9); }
-  }
-
-  .animate-blob {
-    animation: blob 8s ease-in-out infinite;
-  }
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-}
-
-@layer base {
-  :root {
-    --animate-delay: 0.3s;
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  .animate-fadeInUp {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  
-  .animate-slideInRight {
-    animation: slideInRight 0.6s ease-out forwards;
-  }
-  
-  .animate-delay-100 {
-    animation-delay: 0.1s;
-  }
-  
-  .animate-delay-200 {
-    animation-delay: 0.2s;
-  }
-  
-  .animate-delay-300 {
-    animation-delay: 0.3s;
-  }
-  
-  /* Colorful elements */
-  .colorful-bg {
-    background-color: var(--color-primary);
-    transition: background-color 0.3s ease;
-  }
-  
-  .colorful-bg:hover {
-    background-color: var(--color-secondary);
-  }
-  
-  .colorful-text {
-    color: var(--color-primary);
-  }
-  
-  .colorful-border {
-    border-color: var(--color-primary);
-  }
-  
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-900;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #1a7a4a, #d97706);
-    border-radius: 9999px;
-    transition: background-color 0.2s ease;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #1e9e5e, #f59e0b);
-  }
-  
-  /* Gradient text — Emerald to Gold */
-  .gradient-text {
-    background: linear-gradient(135deg, #1a7a4a 0%, #1e9e5e 45%, #d97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  /* Card styles */
-  .card {
-    @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm;
-    transition: all 0.3s ease;
-  }
-  
-  .card:hover {
-    box-shadow: 0 20px 40px -10px rgba(26, 122, 74, 0.18), 0 4px 16px -4px rgba(217, 119, 6, 0.12);
-    transform: translateY(-4px);
-    @apply border-emerald-300 dark:border-emerald-700;
-  }
-  
-  .card-header {
-    @apply bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-100 dark:border-gray-700;
-  }
-  
-  .card-body {
-    @apply p-6;
-  }
-
-  .hover\:scale-102 {
-    @apply transition-all duration-300 hover:-translate-y-1;
-    box-shadow: 0 4px 14px rgba(26, 122, 74, 0.15);
-  }
-  
-  /* Button hover effect */
-  .btn-hover {
-    @apply transition-all duration-300 transform hover:-translate-y-0.5;
-    box-shadow: 0 4px 14px rgba(26, 122, 74, 0.25);
-  }
-  .btn-hover:hover {
-    box-shadow: 0 8px 24px rgba(26, 122, 74, 0.38);
-  }
-  
-  /* Input focus effect */
-  .input-focus {
-    @apply focus:ring-2 transition-all duration-200;
-    --tw-ring-color: rgba(26, 122, 74, 0.4);
-  }
-
-  /* Gold shimmer accent line */
-  .accent-line {
-    height: 3px;
-    background: linear-gradient(90deg, #1a7a4a, #d97706, #1a7a4a);
-    background-size: 200% 100%;
-    animation: shimmer 3s linear infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-}
-
-@layer base {
-  :root {
     /* Emerald green primary */
     --background: 150 30% 97%;
     --foreground: 158 60% 8%;
@@ -278,12 +99,37 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans dark:bg-background dark:text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
   pre, code {
     @apply font-mono;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
   }
 }
 

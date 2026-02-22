@@ -5,82 +5,38 @@ import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #f0faf4 0%, #e8f5ec 40%, #fefce8 100%)' }}>
-      {/* Animated background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full animate-blob opacity-50"
-          style={{ background: 'radial-gradient(circle, rgba(26,122,74,0.18) 0%, rgba(30,158,94,0.08) 70%)' }}
-        />
-        <div
-          className="absolute -bottom-24 -left-24 w-[500px] h-[500px] rounded-full animate-blob animation-delay-2000 opacity-40"
-          style={{ background: 'radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(245,158,11,0.08) 70%)' }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full opacity-20 blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(26,122,74,0.15) 0%, transparent 70%)' }}
-        />
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <div className="animate-fadeInUp">
-            <div className="inline-flex items-center justify-center px-5 py-2 rounded-full text-sm font-semibold mb-6 shadow-sm"
-              style={{ background: 'linear-gradient(135deg, rgba(26,122,74,0.12), rgba(217,119,6,0.1))', border: '1px solid rgba(26,122,74,0.25)', color: '#1a7a4a' }}>
-              <span className="relative flex h-3 w-3 mr-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                  style={{ backgroundColor: '#1a7a4a' }} />
-                <span className="relative inline-flex rounded-full h-3 w-3"
-                  style={{ backgroundColor: '#1a7a4a' }} />
-              </span>
-              Latest Updates from Kogi State
-            </div>
+    <section className="relative border-b bg-gradient-to-b from-background to-muted/40 py-16 md:py-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-muted-foreground">
+            <span className="h-2 w-2 rounded-full bg-primary" />
+            Latest updates from Kogi State
           </div>
 
-          {/* Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-fadeInUp animate-delay-100 text-gray-900">
-            Welcome to{' '}
-            <span className="gradient-text">Kogiuncovered</span>
-            <span className="block text-3xl md:text-4xl lg:text-5xl mt-2 font-black"
-              style={{ color: '#d97706' }}>
-              TV
-            </span>
+          <h1 className="mb-5 text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+            Kogiuncovered TV
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto animate-fadeInUp animate-delay-200">
-            Discover the latest news, stories, and insights from Kogi State and beyond.{' '}
-            <span className="block mt-2 font-semibold" style={{ color: '#1a7a4a' }}>
-              Your window to the heart of Nigeria.
-            </span>
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">
+            Reliable reporting, meaningful stories, and clear insights from communities across Kogi.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp animate-delay-300">
-            <Button size="lg" className="text-lg px-8 btn-hover border-0 text-white" asChild
-              style={{ background: 'linear-gradient(135deg, #1a7a4a, #1e9e5e)' }}>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Button size="lg" className="px-8" asChild>
               <Link to="/articles">
-                Start Reading
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Read Latest Articles
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 font-semibold transition-all duration-300"
-              style={{ borderColor: '#d97706', color: '#d97706' }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(217,119,6,0.08)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-              }}
-            >
-              <Newspaper className="mr-2 h-5 w-5" />
-              Browse Topics
+            <Button variant="outline" size="lg" className="px-8" asChild>
+              <Link to="/articles">
+                <Newspaper className="mr-2 h-5 w-5" />
+                Browse Categories
+              </Link>
             </Button>
           </div>
 
-          {/* Stats counter */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-4 md:grid-cols-4">
             {[
               { number: '100+', label: 'Articles' },
               { number: '50k+', label: 'Readers' },
@@ -89,19 +45,12 @@ const HeroSection: React.FC = () => {
             ].map((stat, index) => (
               <div
                 key={stat.label}
-                className="backdrop-blur-sm p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1"
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1 + 0.4}s forwards`,
-                  opacity: 0,
-                  background: 'rgba(255,255,255,0.85)',
-                  border: '1px solid rgba(26,122,74,0.15)',
-                  boxShadow: '0 4px 20px rgba(26,122,74,0.08)'
-                }}
+                className="rounded-xl border bg-card p-4 text-left transition-colors hover:border-primary/40"
               >
-                <div className="text-2xl md:text-3xl font-black gradient-text">
+                <div className="text-2xl font-bold text-foreground md:text-3xl">
                   {stat.number}
                 </div>
-                <div className="text-sm text-gray-500 mt-1 font-medium">{stat.label}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>

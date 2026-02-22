@@ -45,13 +45,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
   };
 
   return (
-    <header
-      className="sticky top-0 z-50 w-full shadow-lg"
-      style={{ background: 'linear-gradient(135deg, #0f5c2e 0%, #1a7a4a 50%, #1e9e5e 100%)' }}
-    >
-      {/* Gold shimmer accent line */}
-      <div className="accent-line w-full" />
-
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo & Brand */}
@@ -59,22 +53,19 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-white hover:bg-white/10"
+              className="md:hidden"
               onClick={handleMenuToggle}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link to="/" className="flex items-center space-x-2 group">
-              <div
-                className="flex items-center justify-center w-8 h-8 rounded-lg"
-                style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)' }}
-              >
-                <Tv className="h-4 w-4 text-white" />
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary">
+                <Tv className="h-4 w-4" />
               </div>
-              <h1 className="text-xl font-bold text-white tracking-tight group-hover:opacity-90 transition-opacity">
+              <h1 className="text-xl font-bold tracking-tight text-foreground transition-opacity group-hover:opacity-90">
                 Kogiuncovered
-                <span className="text-amber-300 font-black"> TV</span>
+                <span className="font-black text-primary"> TV</span>
               </h1>
             </Link>
           </div>
@@ -87,9 +78,9 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
-                    ? 'bg-white/20 text-white font-semibold'
-                    : 'text-white/85 hover:bg-white/15 hover:text-white'
+                  `px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isActive
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`
                 }
               >
@@ -100,19 +91,14 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
 
           {/* Action buttons */}
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm" className="text-white hover:bg-white/15 hover:text-white" asChild>
+            <Button variant="ghost" size="sm" asChild>
               <Link to="/search">
                 <Search className="h-4 w-4" />
               </Link>
             </Button>
 
             {isAdmin && (
-              <Button
-                size="sm"
-                className="font-semibold border-0 text-white"
-                style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)' }}
-                asChild
-              >
+              <Button size="sm" className="font-semibold" asChild>
                 <Link to="/create-post" className="flex items-center space-x-1">
                   <PenLine className="h-4 w-4" />
                   <span>Write</span>
@@ -125,7 +111,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
                 variant="ghost"
                 size="sm"
                 onClick={logout}
-                className="text-white hover:bg-white/15 hover:text-white flex items-center space-x-1"
+                className="flex items-center space-x-1"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
@@ -134,7 +120,6 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/15 hover:text-white"
                 asChild
               >
                 <Link to="/login" className="flex items-center space-x-1">
@@ -162,8 +147,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
         />
         {/* Menu panel */}
         <div
-          className="absolute top-0 left-0 right-0 mt-16 mx-4 rounded-xl shadow-xl overflow-hidden animate-in slide-in-from-top-2 duration-200"
-          style={{ background: 'linear-gradient(160deg, #0d4d27 0%, #0f5c2e 50%, #1a7a4a 100%)' }}
+          className="absolute top-0 left-0 right-0 mt-16 mx-4 overflow-hidden rounded-xl border bg-background shadow-xl animate-in slide-in-from-top-2 duration-200"
         >
           <nav className="p-4 space-y-1">
             {navLinks.map((link) => (
@@ -173,7 +157,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
                 end={link.end}
                 className={({ isActive }) =>
                   `block px-4 py-3 text-base font-medium rounded-lg transition-colors ${
-                    isActive ? 'bg-white/20 text-white' : 'text-white/90 hover:bg-white/15'
+                    isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`
                 }
                 onClick={() => setMobileMenuOpen(false)}
@@ -182,13 +166,13 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
               </NavLink>
             ))}
           </nav>
-          <div className="p-4 pt-0 space-y-2 border-t border-white/10">
-            <Link to="/search" className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>
+          <div className="space-y-2 border-t p-4 pt-0">
+            <Link to="/search" className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" onClick={() => setMobileMenuOpen(false)}>
               <Search className="h-5 w-5" />
               <span>Search</span>
             </Link>
             {isAdmin && (
-              <Link to="/create-post" className="flex items-center gap-2 w-full px-4 py-3 rounded-lg transition-colors text-white font-medium" style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)' }} onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/create-post" className="flex w-full items-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90" onClick={() => setMobileMenuOpen(false)}>
                 <PenLine className="h-5 w-5" />
                 <span>Write</span>
               </Link>
@@ -196,14 +180,14 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
             {isAuthenticated ? (
               <button
                 type="button"
-                className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors text-left"
+                className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-left text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 onClick={() => { setMobileMenuOpen(false); logout(); }}
               >
                 <LogOut className="h-5 w-5" />
                 <span>Logout</span>
               </button>
             ) : (
-              <Link to="/login" className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/login" className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" onClick={() => setMobileMenuOpen(false)}>
                 <LogIn className="h-5 w-5" />
                 <span>Login</span>
               </Link>

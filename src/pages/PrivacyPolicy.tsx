@@ -17,25 +17,6 @@ const PrivacyPolicy: React.FC = () => {
           <p>
             We may collect information you provide directly (e.g., when contacting us), information from your device and browser (e.g., IP address, browser type), and information collected automatically through cookies and similar technologies when you browse our site.
           </p>
-
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Google AdSense and Third-Party Advertising</h2>
-          <p>
-            We use Google AdSense to display advertisements on our site. Google AdSense is a third-party advertising service that may use cookies, web beacons, and other technologies to collect information about your visits to our site and other websites. This information is used to show you ads that may be relevant to your interests.
-          </p>
-          <p>
-            Google and its partners may use this information to serve personalized ads. You can learn more about how Google uses data from sites and apps that use its services at{' '}
-            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              Google&apos;s Partner Sites Policy
-            </a>.
-          </p>
-          <p>
-            You can opt out of personalized advertising by visiting{' '}
-            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              Google Ads Settings
-            </a>.
-          </p>
-
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Cookies</h2>
           <p>
             We use cookies and similar tracking technologies to improve your experience, analyze site traffic, and support advertising. Third-party vendors, including Google, may use cookies to serve ads based on your prior visits to our site. You can control cookie preferences through your browser settings.
           </p>

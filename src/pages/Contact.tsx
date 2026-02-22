@@ -29,15 +29,15 @@ const Contact: React.FC = () => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Get In Touch</h1>
+        <h1 className="mb-8 text-4xl font-bold tracking-tight">Get In Touch</h1>
 
-        <div className="prose prose-lg max-w-none mb-8">
+        <div className="prose prose-lg mb-8 max-w-none">
           <p className="text-muted-foreground">
             Have questions, suggestions, or want to collaborate? We'd love to hear from you.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border bg-card p-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-2">Name</label>
             <Input
@@ -88,8 +88,7 @@ const Contact: React.FC = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full text-white border-0"
-            style={{ background: 'linear-gradient(135deg, #1a7a4a, #1e9e5e)' }}>
+          <Button type="submit" className="w-full">
             Send Message
           </Button>
         </form>
