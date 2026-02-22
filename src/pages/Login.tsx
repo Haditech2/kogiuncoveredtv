@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import AdSlot from '@/components/ads/AdSlot';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -96,6 +97,9 @@ const Login: React.FC = () => {
               </CardFooter>
             </form>
           </Card>
+          <div className="mt-8">
+            <AdSlot adFormat="horizontal" className="mx-auto min-w-[320px] max-w-[728px] w-full" />
+          </div>
         </div>
       </main>
       <Footer />
