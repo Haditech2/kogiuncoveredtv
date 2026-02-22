@@ -45,11 +45,11 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/88">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-[4.25rem] items-center justify-between">
           {/* Logo & Brand */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button
               variant="ghost"
               size="sm"
@@ -59,11 +59,11 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
-            <Link to="/" className="flex items-center space-x-2 group">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary">
+            <Link to="/" className="group flex items-center space-x-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
                 <Tv className="h-4 w-4" />
               </div>
-              <h1 className="text-xl font-bold tracking-tight text-foreground transition-opacity group-hover:opacity-90">
+              <h1 className="text-lg font-bold tracking-tight text-foreground transition-opacity group-hover:opacity-90 sm:text-xl">
                 Kogiuncovered
                 <span className="font-black text-primary"> TV</span>
               </h1>
@@ -71,16 +71,16 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
           </div>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center gap-1.5">
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isActive
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  `rounded-lg px-3 py-2 text-sm font-medium transition-colors ${isActive
+                    ? 'bg-secondary text-foreground'
+                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                   }`
                 }
               >
@@ -90,7 +90,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
           </nav>
 
           {/* Action buttons */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <Button variant="ghost" size="sm" asChild>
               <Link to="/search">
                 <Search className="h-4 w-4" />
@@ -101,7 +101,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
               <Button size="sm" className="font-semibold" asChild>
                 <Link to="/create-post" className="flex items-center space-x-1">
                   <PenLine className="h-4 w-4" />
-                  <span>Write</span>
+                  <span className="hidden sm:inline">Write</span>
                 </Link>
               </Button>
             )}
@@ -114,7 +114,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
                 className="flex items-center space-x-1"
               >
                 <LogOut className="h-4 w-4" />
-                <span>Logout</span>
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             ) : (
               <Button
@@ -124,7 +124,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
               >
                 <Link to="/login" className="flex items-center space-x-1">
                   <LogIn className="h-4 w-4" />
-                  <span>Login</span>
+                  <span className="hidden sm:inline">Login</span>
                 </Link>
               </Button>
             )}
@@ -146,9 +146,7 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
           aria-label="Close menu"
         />
         {/* Menu panel */}
-        <div
-          className="absolute top-0 left-0 right-0 mt-16 mx-4 overflow-hidden rounded-xl border bg-background shadow-xl animate-in slide-in-from-top-2 duration-200"
-        >
+        <div className="absolute left-0 right-0 top-0 mx-4 mt-16 overflow-hidden rounded-2xl border border-border/70 bg-background shadow-xl animate-in slide-in-from-top-2 duration-200">
           <nav className="p-4 space-y-1">
             {navLinks.map((link) => (
               <NavLink

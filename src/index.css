@@ -7,90 +7,83 @@
 
 @layer base {
   :root {
-    /* Emerald green primary */
-    --background: 150 30% 97%;
-    --foreground: 158 60% 8%;
+    --background: 210 20% 98%;
+    --foreground: 218 36% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 158 60% 8%;
+    --card-foreground: 218 36% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 158 60% 8%;
+    --popover-foreground: 218 36% 14%;
 
-    /* Deep Emerald */
-    --primary: 152 64% 28%;
-    --primary-foreground: 150 100% 97%;
+    --primary: 159 64% 30%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Soft Sage */
-    --secondary: 152 30% 92%;
-    --secondary-foreground: 152 50% 18%;
+    --secondary: 214 24% 92%;
+    --secondary-foreground: 220 30% 24%;
 
-    /* Soft grey-green muted */
-    --muted: 152 20% 94%;
-    --muted-foreground: 152 15% 42%;
+    --muted: 213 22% 94%;
+    --muted-foreground: 217 14% 43%;
 
-    /* Gold accent */
-    --accent: 38 92% 50%;
-    --accent-foreground: 38 100% 10%;
+    --accent: 162 42% 88%;
+    --accent-foreground: 162 50% 18%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 152 20% 86%;
-    --input: 152 20% 86%;
-    --ring: 152 64% 28%;
+    --border: 214 22% 86%;
+    --input: 214 22% 86%;
+    --ring: 159 64% 30%;
 
     --radius: 0.625rem;
 
-    --sidebar-background: 152 28% 94%;
-    --sidebar-foreground: 152 40% 18%;
-    --sidebar-primary: 152 64% 28%;
+    --sidebar-background: 213 24% 95%;
+    --sidebar-foreground: 219 32% 18%;
+    --sidebar-primary: 159 64% 30%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 152 20% 88%;
-    --sidebar-accent-foreground: 152 40% 18%;
-    --sidebar-border: 152 18% 86%;
-    --sidebar-ring: 152 64% 28%;
+    --sidebar-accent: 214 20% 90%;
+    --sidebar-accent-foreground: 219 32% 18%;
+    --sidebar-border: 214 18% 86%;
+    --sidebar-ring: 159 64% 30%;
   }
 
   .dark {
-    --background: 160 30% 6%;
-    --foreground: 152 20% 94%;
+    --background: 222 36% 7%;
+    --foreground: 214 25% 92%;
 
-    --card: 160 28% 9%;
-    --card-foreground: 152 20% 94%;
+    --card: 222 30% 10%;
+    --card-foreground: 214 25% 92%;
 
-    --popover: 160 28% 9%;
-    --popover-foreground: 152 20% 94%;
+    --popover: 222 30% 10%;
+    --popover-foreground: 214 25% 92%;
 
-    /* Brighter emerald for dark */
-    --primary: 152 72% 42%;
-    --primary-foreground: 160 30% 6%;
+    --primary: 159 66% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 160 25% 16%;
-    --secondary-foreground: 152 20% 90%;
+    --secondary: 220 20% 17%;
+    --secondary-foreground: 214 24% 90%;
 
-    --muted: 160 20% 14%;
-    --muted-foreground: 152 15% 60%;
+    --muted: 220 18% 15%;
+    --muted-foreground: 215 14% 66%;
 
-    /* Gold stays vivid in dark */
-    --accent: 38 95% 55%;
-    --accent-foreground: 38 100% 8%;
+    --accent: 159 28% 22%;
+    --accent-foreground: 160 30% 88%;
 
     --destructive: 0 62.8% 42%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 160 20% 18%;
-    --input: 160 20% 18%;
-    --ring: 152 72% 42%;
+    --border: 220 18% 20%;
+    --input: 220 18% 20%;
+    --ring: 159 66% 45%;
 
-    --sidebar-background: 160 28% 10%;
-    --sidebar-foreground: 152 20% 90%;
-    --sidebar-primary: 152 72% 42%;
+    --sidebar-background: 221 28% 10%;
+    --sidebar-foreground: 214 22% 88%;
+    --sidebar-primary: 159 66% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 160 22% 18%;
-    --sidebar-accent-foreground: 152 20% 90%;
-    --sidebar-border: 160 22% 18%;
-    --sidebar-ring: 152 72% 42%;
+    --sidebar-accent: 220 20% 18%;
+    --sidebar-accent-foreground: 214 22% 88%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 159 66% 45%;
   }
 }
 
@@ -105,6 +98,7 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    text-wrap: pretty;
   }
 
   pre, code {
@@ -130,6 +124,10 @@
 
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/50;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.015em;
   }
 }
 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion, Variants } from 'framer-motion';
 import { Clock, Calendar, ArrowRight } from 'lucide-react';
 import { BlogPost } from '@/contexts/BlogContext';
 
 interface BlogCardProps {
-  post: BlogPost;
+  post?: BlogPost;
   className?: string;
   index?: number;
   // Add individual props for backward compatibility
@@ -18,38 +17,24 @@ interface BlogCardProps {
   imageUrl?: string;
   slug?: string;
 }
-
-const variants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 16
-  },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      delay: i * 0.06,
-      ease: [0.16, 1, 0.3, 1]
-    }
-  }),
-  hover: {
-    y: -4,
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 0.2, 1]
-    }
-  }
-};
-
-export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index = 0 }) => {
-  
+export const BlogCard: React.FC<BlogCardProps> = ({
+  post,
+  className = '',
+  title,
+  excerpt,
+  author,
+  date,
+  readTime,
+  tags,
+  imageUrl,
+  slug,
+}) => {
   const article = post || {
-    title,
-    excerpt,
-    author,
-    date,
-    readTime,
+    title: title || '',
+    excerpt: excerpt || '',
+    author: author || 'Unknown Author',
+    date: date || '',
+    readTime: readTime || '',
     tags: tags || [],
     imageUrl: imageUrl || '/placeholder.svg',
     slug: slug || ''
@@ -67,20 +52,13 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
   } = article;
 
   return (
-    <motion.article
-      variants={variants}
-      custom={index}
-      initial="hidden"
-      animate="visible"
-      whileHover="hover"
-      className={`group relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-all duration-200 hover:border-primary/30 hover:shadow-md ${className}`}
-    >
+    <article className={`group relative overflow-hidden rounded-2xl border border-border/80 bg-card text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-lg ${className}`}>
       <Link to={`/articles/${articleSlug}`} className="block">
         <div className="relative aspect-video overflow-hidden bg-muted">
           <img
             src={articleImageUrl}
             alt={articleTitle}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             loading="lazy"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -92,7 +70,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
               {Array.isArray(articleTags) && articleTags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/40 bg-black/55 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm"
+                  className="rounded-full border border-white/40 bg-black/60 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm"
                 >
                   {tag}
                 </span>
@@ -102,7 +80,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
         </div>
 
         <div className="p-6">
-          <div className="mb-3 flex items-center text-sm text-muted-foreground">
+          <div className="mb-3 flex flex-wrap items-center gap-y-1 text-sm text-muted-foreground">
             <span className="flex items-center mr-4">
               <Calendar className="w-4 h-4 mr-1 text-primary" />
               {articleDate}
@@ -119,13 +97,15 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, className = '', index 
 
           <p className="mb-5 line-clamp-2 text-muted-foreground">{articleExcerpt}</p>
 
-          <div className="flex items-center text-sm font-medium text-primary transition-transform duration-200 group-hover:translate-x-1">
+          <p className="mb-4 text-sm font-medium text-foreground/75">By {articleAuthor}</p>
+
+          <div className="flex items-center text-sm font-semibold text-primary transition-transform duration-200 group-hover:translate-x-1">
             Read more
             <ArrowRight className="ml-2 w-4 h-4" />
           </div>
         </div>
       </Link>
-    </motion.article>
+    </article>
   );
 };
 

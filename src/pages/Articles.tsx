@@ -4,11 +4,12 @@ import AdSlot from '@/components/ads/AdSlot';
 
 const Articles: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8 rounded-xl border bg-card p-6">
+    <div className="container mx-auto px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mb-8 rounded-2xl border border-border/80 bg-card p-6 md:p-8">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-primary">Archive</p>
         <h1 className="mb-3 text-4xl font-bold tracking-tight">All Articles</h1>
-        <p className="text-lg text-muted-foreground">
-          Discover our complete collection of articles covering web development, design, and technology.
+        <p className="text-base text-muted-foreground md:text-lg">
+          Browse our complete coverage of politics, business, communities, culture, and public affairs across Kogi State.
         </p>
       </div>
       <div className="mb-8 flex justify-center">

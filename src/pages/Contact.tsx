@@ -27,8 +27,9 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-2xl mx-auto">
+    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-2xl">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-primary">Contact</p>
         <h1 className="mb-8 text-4xl font-bold tracking-tight">Get In Touch</h1>
 
         <div className="prose prose-lg mb-8 max-w-none">
@@ -37,7 +38,7 @@ const Contact: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border bg-card p-6">
+        <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-border/80 bg-card p-6 md:p-8">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-2">Name</label>
             <Input
@@ -88,15 +89,15 @@ const Contact: React.FC = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full h-11">
             Send Message
           </Button>
         </form>
 
-        <div className="mt-12 p-6 bg-muted/50 rounded-lg">
+        <div className="mt-12 rounded-2xl border border-border/80 bg-muted/40 p-6">
           <h3 className="text-lg font-semibold mb-2">Other Ways to Connect</h3>
           <p className="text-sm text-muted-foreground">
-            Follow us on social media for the latest updates and join our community discussions.
+            Email us directly at <span className="font-medium text-foreground">kogiuncoveredtv@gmail.com</span> for editorial requests and partnerships.
           </p>
         </div>
       </div>

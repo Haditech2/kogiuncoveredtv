@@ -2,12 +2,13 @@ import React from 'react';
 
 const About: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-primary">About</p>
         <h1 className="mb-8 text-4xl font-bold tracking-tight">About Kogiuncovered</h1>
 
-        <div className="prose prose-lg max-w-none rounded-xl border bg-card p-6">
-          <p className="text-xl text-muted-foreground mb-8">
+        <div className="prose prose-lg max-w-none rounded-2xl border border-border/80 bg-card p-6 md:p-8">
+          <p className="mb-8 text-xl text-muted-foreground">
             Welcome to Kogiuncovered, your trusted source for news, stories, and insights from Kogi State and beyond.
           </p>
 

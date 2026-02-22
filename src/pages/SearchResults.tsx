@@ -31,9 +31,10 @@ const SearchResults: React.FC = () => {
     <div className="bg-background">
       <main className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <h1 className="mb-4 text-3xl font-bold tracking-tight">Search Results</h1>
-            <p className="text-muted-foreground text-lg">
+          <div className="mb-10 rounded-2xl border border-border/80 bg-card p-6 text-center md:p-8">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-primary">Search</p>
+            <h1 className="mb-3 text-3xl font-bold tracking-tight">Search Results</h1>
+            <p className="text-lg text-muted-foreground">
               {results.length} result{results.length !== 1 ? 's' : ''} found for "{searchQuery}"
             </p>
           </div>
@@ -55,7 +56,7 @@ const SearchResults: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
+            <div className="rounded-2xl border border-border/80 bg-card py-12 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                 <Search className="h-8 w-8 text-muted-foreground" />
               </div>
