@@ -18,6 +18,8 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
     { to: '/articles', label: 'Articles', end: false },
     { to: '/about', label: 'About', end: false },
     { to: '/contact', label: 'Contact', end: false },
+    { to: '/privacy', label: 'Privacy', end: false },
+    { to: '/terms', label: 'Terms', end: false },
   ];
 
   // Close mobile menu on route change

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArticleGrid } from '@/components/blog/ArticleGrid';
+import AdSlot from '@/components/ads/AdSlot';
 
 const Articles: React.FC = () => {
   return (
@@ -9,6 +10,9 @@ const Articles: React.FC = () => {
         <p className="text-lg text-muted-foreground">
           Discover our complete collection of articles covering web development, design, and technology.
         </p>
+      </div>
+      <div className="mb-8 flex justify-center">
+        <AdSlot adFormat="horizontal" className="min-w-[320px] max-w-[728px] w-full" />
       </div>
       <ArticleGrid />
     </div>

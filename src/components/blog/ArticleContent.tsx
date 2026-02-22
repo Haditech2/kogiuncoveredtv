@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useBlog } from '@/contexts/BlogContext';
 import { LikeButton } from './LikeButton';
 import { CommentSection } from './CommentSection';
+import AdSlot from '../ads/AdSlot';
 
 interface ArticleContentProps {
   article: BlogPost;
@@ -85,6 +86,10 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
           className="prose prose-lg max-w-none mt-8"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
+
+        <div className="my-8 flex justify-center">
+          <AdSlot adFormat="rectangle" className="min-w-[300px] max-w-[336px]" />
+        </div>
 
         <div className="mt-12 pt-6 border-t">
           <div className="flex items-center space-x-4 mb-8">

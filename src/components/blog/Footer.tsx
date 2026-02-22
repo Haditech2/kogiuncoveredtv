@@ -36,6 +36,8 @@ export const Footer: React.FC = () => {
               <li><Link to="/articles" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">Articles</Link></li>
               <li><Link to="/about" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">About</Link></li>
               <li><Link to="/contact" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">Contact</Link></li>
+              <li><Link to="/privacy" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">Terms of Service</Link></li>
               {isAdmin && (
                 <li><Link to="/create-post" className="text-emerald-200/60 hover:text-amber-400 transition-colors duration-200">Create Post</Link></li>
               )}
@@ -60,8 +62,13 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-emerald-800/50 mt-8 pt-8 text-center text-sm text-emerald-300/50">
+        <div className="border-t border-emerald-800/50 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-sm text-emerald-300/50">
           <p>&copy; {new Date().getFullYear()} Kogiuncovered TV. All rights reserved.</p>
+          <span className="hidden sm:inline">·</span>
+          <div className="flex gap-4">
+            <Link to="/privacy" className="hover:text-amber-400 transition-colors">Privacy</Link>
+            <Link to="/terms" className="hover:text-amber-400 transition-colors">Terms</Link>
+          </div>
         </div>
       </div>
     </footer>
