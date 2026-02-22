@@ -9,7 +9,7 @@ interface AdSlotProps {
 
 const AdSlot: React.FC<AdSlotProps> = ({
 	adSlot,
-	adClient = import.meta.env.VITE_ADSENSE_CLIENT as string | undefined,
+	adClient = (import.meta.env.VITE_ADSENSE_CLIENT as string | undefined) || 'ca-pub-4211041071990839',
 	adFormat = 'auto',
 	className = '',
 }) => {
