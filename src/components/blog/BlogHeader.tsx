@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Search, Menu, PenLine, LogIn, LogOut, Tv } from 'lucide-react';
-import { NavLink, Link } from 'react-router-dom';
+import { Search, Menu, PenLine, LogIn, LogOut, Tv, X } from 'lucide-react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface BlogHeaderProps {
@@ -9,7 +9,9 @@ interface BlogHeaderProps {
 }
 
 const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isAdmin, logout } = useAuth();
+  const location = useLocation();
 
   const navLinks = [
     { to: '/', label: 'Home', end: true },
@@ -17,6 +19,28 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
     { to: '/about', label: 'About', end: false },
     { to: '/contact', label: 'Contact', end: false },
   ];
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const handleMenuToggle = () => {
+    setMobileMenuOpen((prev) => !prev);
+    onMenuClick?.();
+  };
 
   return (
     <header
@@ -34,9 +58,10 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
               variant="ghost"
               size="sm"
               className="md:hidden text-white hover:bg-white/10"
-              onClick={onMenuClick}
+              onClick={handleMenuToggle}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              <Menu className="h-5 w-5" />
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link to="/" className="flex items-center space-x-2 group">
               <div
@@ -120,7 +145,70 @@ const BlogHeader: React.FC<BlogHeaderProps> = ({ onMenuClick }) => {
         </div>
       </div>
 
-      {/* Mobile nav (shown when menu is open — simple overlay approach) */}
+      {/* Mobile nav overlay */}
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-opacity duration-200 ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/50"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        />
+        {/* Menu panel */}
+        <div
+          className="absolute top-0 left-0 right-0 mt-16 mx-4 rounded-xl shadow-xl overflow-hidden animate-in slide-in-from-top-2 duration-200"
+          style={{ background: 'linear-gradient(160deg, #0d4d27 0%, #0f5c2e 50%, #1a7a4a 100%)' }}
+        >
+          <nav className="p-4 space-y-1">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                className={({ isActive }) =>
+                  `block px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                    isActive ? 'bg-white/20 text-white' : 'text-white/90 hover:bg-white/15'
+                  }`
+                }
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="p-4 pt-0 space-y-2 border-t border-white/10">
+            <Link to="/search" className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>
+              <Search className="h-5 w-5" />
+              <span>Search</span>
+            </Link>
+            {isAdmin && (
+              <Link to="/create-post" className="flex items-center gap-2 w-full px-4 py-3 rounded-lg transition-colors text-white font-medium" style={{ background: 'linear-gradient(135deg, #d97706, #f59e0b)' }} onClick={() => setMobileMenuOpen(false)}>
+                <PenLine className="h-5 w-5" />
+                <span>Write</span>
+              </Link>
+            )}
+            {isAuthenticated ? (
+              <button
+                type="button"
+                className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors text-left"
+                onClick={() => { setMobileMenuOpen(false); logout(); }}
+              >
+                <LogOut className="h-5 w-5" />
+                <span>Logout</span>
+              </button>
+            ) : (
+              <Link to="/login" className="flex items-center gap-2 w-full px-4 py-3 text-white/90 hover:bg-white/15 rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                <LogIn className="h-5 w-5" />
+                <span>Login</span>
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
     </header>
   );
 };

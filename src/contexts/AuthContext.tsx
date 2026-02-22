@@ -39,9 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    // In a real app, this would be an API call to authenticate
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      const user = { username, isAdmin: true };
+    const u = username.trim();
+    const p = password.trim();
+    if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase() && p === ADMIN_PASSWORD) {
+      const user = { username: u, isAdmin: true };
       setUser(user);
       localStorage.setItem('user', JSON.stringify(user));
       return true;
