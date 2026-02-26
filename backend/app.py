@@ -69,6 +69,18 @@ class Post(db.Model):
         }
 
 # Routes
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({
+        'message': 'Kogiuncovered TV API',
+        'version': '1.0',
+        'endpoints': {
+            'posts': '/api/posts',
+            'upload': '/api/upload',
+            'search': '/api/search'
+        }
+    })
+
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
     posts = Post.query.order_by(Post.created_at.desc()).all()
@@ -214,5 +226,6 @@ if __name__ == '__main__':
         db.create_all()
     app.run(debug=True)
 
-# For Vercel
-app = app
+# Initialize database tables for Vercel
+with app.app_context():
+    db.create_all()
