@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Clock, Calendar, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Clock, Calendar, ArrowRight, Edit } from 'lucide-react';
 import { BlogPost } from '@/contexts/BlogContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 interface BlogCardProps {
   post?: BlogPost;
@@ -29,7 +31,11 @@ export const BlogCard: React.FC<BlogCardProps> = ({
   imageUrl,
   slug,
 }) => {
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  
   const article = post || {
+    id: '',
     title: title || '',
     excerpt: excerpt || '',
     author: author || 'Unknown Author',
@@ -41,6 +47,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({
   };
 
   const {
+    id: articleId = '',
     title: articleTitle = '',
     excerpt: articleExcerpt = '',
     author: articleAuthor = 'Unknown Author',
@@ -51,8 +58,24 @@ export const BlogCard: React.FC<BlogCardProps> = ({
     slug: articleSlug = ''
   } = article;
 
+  const handleEdit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/edit-post/${articleId}`);
+  };
+
   return (
     <article className={`group relative overflow-hidden rounded-2xl border border-border/80 bg-card text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-lg ${className}`}>
+      {isAdmin && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm"
+          onClick={handleEdit}
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      )}
       <Link to={`/articles/${articleSlug}`} className="block">
         <div className="relative aspect-video overflow-hidden bg-muted">
           <img

@@ -63,7 +63,7 @@ const EditPost: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title || !content || !excerpt) {
@@ -76,20 +76,28 @@ const EditPost: React.FC = () => {
     }
 
     if (postId) {
-      // Update the post
-      editPost(postId, {
-        title,
-        excerpt,
-        content,
-        tags: tags.length > 0 ? tags : ['Uncategorized'],
-        imageUrl: featuredImage
-      });
+      try {
+        // Update the post
+        await editPost(postId, {
+          title,
+          excerpt,
+          content,
+          tags: tags.length > 0 ? tags : ['Uncategorized'],
+          imageUrl: featuredImage
+        });
 
-      toast({
-        title: 'Success!',
-        description: 'The post has been updated',
-      });
-      navigate('/articles');
+        toast({
+          title: 'Success!',
+          description: 'The post has been updated',
+        });
+        navigate('/articles');
+      } catch (error) {
+        toast({
+          title: 'Error',
+          description: 'Failed to update post. Please try again.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
