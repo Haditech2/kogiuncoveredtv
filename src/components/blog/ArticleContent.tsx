@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Clock, User, Calendar, Edit, MessageCircle, Heart } from 'lucide-react';
+import { Clock, User, Calendar, Edit, MessageCircle, Heart, Trash2 } from 'lucide-react';
 import { BlogPost, Comment } from '@/contexts/BlogContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,6 +9,7 @@ import { useBlog } from '@/contexts/BlogContext';
 import { LikeButton } from './LikeButton';
 import { CommentSection } from './CommentSection';
 import AdSlot from '../ads/AdSlot';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ArticleContentProps {
   article: BlogPost;
@@ -17,11 +18,31 @@ interface ArticleContentProps {
 export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
-  const { addComment, toggleLike } = useBlog();
+  const { addComment, toggleLike, deletePost } = useBlog();
   const [showComments, setShowComments] = useState(false);
+  const { toast } = useToast();
 
   const handleEdit = () => {
     navigate(`/edit-post/${article.id}`);
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+    
+    try {
+      await deletePost(article.id);
+      toast({
+        title: 'Success!',
+        description: 'Post deleted successfully',
+      });
+      navigate('/articles');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete post',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleAddComment = async (content: string) => {
@@ -59,10 +80,16 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
               {article.title}
             </h1>
             {isAdmin && (
-              <Button variant="outline" size="sm" onClick={handleEdit}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={handleEdit}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleDelete} className="text-destructive hover:text-destructive">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
 

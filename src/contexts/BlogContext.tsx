@@ -31,6 +31,7 @@ interface BlogContextType {
   loading: boolean;
   addPost: (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => Promise<void>;
   editPost: (id: string, updatedPost: Partial<BlogPost>) => Promise<void>;
+  deletePost: (id: string) => Promise<void>;
   getPostBySlug: (slug: string) => BlogPost | undefined;
   searchPosts: (query: string) => Promise<BlogPost[]>;
   addComment: (postId: string, comment: Omit<Comment, 'id' | 'date'>) => Promise<void>;
@@ -267,6 +268,16 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const deletePost = async (id: string) => {
+    try {
+      await api.deletePost(id);
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      throw error;
+    }
+  };
+
   const searchPosts = async (query: string) => {
     if (!query.trim()) return [];
     try {
@@ -337,7 +348,7 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       posts,
       loading,
       addPost, 
-      editPost, 
+      editPost,`n      deletePost, 
       getPostBySlug, 
       searchPosts, 
       addComment, 
