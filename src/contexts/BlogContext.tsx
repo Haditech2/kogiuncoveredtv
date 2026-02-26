@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '@/lib/api';
+import { useToast } from '@/components/ui/use-toast';
 
 export interface Comment {
   id: string;

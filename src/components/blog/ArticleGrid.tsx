@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BlogCard from './BlogCard';
 import { useBlog } from '@/contexts/BlogContext';
+import { useToast } from '@/components/ui/use-toast';
 
 
 
 export const ArticleGrid: React.FC = () => {
   const { posts, loading } = useBlog();
+  const { toast } = useToast();
+
+  // Check for posts with invalid images
+  useEffect(() => {
+    const postsWithBlobUrls = posts.filter(post => 
+      post.imageUrl && post.imageUrl.startsWith('blob:')
+    );
+    
+    if (postsWithBlobUrls.length > 0) {
+      toast({
+        title: 'Warning',
+        description: `${postsWithBlobUrls.length} post(s) have invalid images. Please delete them from the admin dashboard at /admin`,
+        variant: 'destructive',
+      });
+    }
+  }, [posts, toast]);
 
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
