@@ -17,6 +17,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SearchResults from "./pages/SearchResults";
@@ -50,6 +51,7 @@ const App = () => (
                 <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/search" element={<Layout><SearchResults /></Layout>} />
+                <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Layout><AdminDashboard /></Layout></ProtectedRoute>} />
                 <Route path="/create-post" element={<ProtectedRoute adminOnly={true}><Layout><CreatePost /></Layout></ProtectedRoute>} />
                 <Route path="/edit-post/:postId" element={<ProtectedRoute adminOnly={true}><Layout><EditPost /></Layout></ProtectedRoute>} />
                 <Route path="/404" element={<Layout><NotFound /></Layout>} />
