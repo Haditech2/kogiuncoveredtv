@@ -35,14 +35,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       setUploadProgress(0);
       
       try {
+        console.log('Uploading file to Cloudinary...', file.name);
         // Upload to Cloudinary via backend
         const result = await api.uploadFile(file);
+        console.log('Upload successful:', result);
         setPreview(result.url);
         onChange(result.url);
         setUploadProgress(100);
       } catch (error) {
         console.error('Upload failed:', error);
-        alert('Failed to upload file. Please try again.');
+        alert(`Failed to upload file: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
       } finally {
         setIsUploading(false);
         setUploadProgress(0);
