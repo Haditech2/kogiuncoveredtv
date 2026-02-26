@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 load_dotenv()
 
@@ -14,8 +17,16 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-change-this')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 db = SQLAlchemy(app)
+
+# Cloudinary configuration
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 
 # Models
 class Post(db.Model):
@@ -141,6 +152,57 @@ def search_posts():
     ).all()
     
     return jsonify([post.to_dict() for post in posts])
+
+@app.route('/api/upload', methods=['POST'])
+def upload_file():
+    """Upload image or video to Cloudinary"""
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    
+    try:
+        # Determine resource type based on file extension
+        file_ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
+        resource_type = 'video' if file_ext in ['mp4', 'mov', 'avi', 'mkv', 'webm'] else 'image'
+        
+        # Upload to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            file,
+            resource_type=resource_type,
+            folder='kogiuncovered',
+            transformation=[
+                {'quality': 'auto', 'fetch_format': 'auto'}
+            ] if resource_type == 'image' else None
+        )
+        
+        return jsonify({
+            'url': upload_result['secure_url'],
+            'public_id': upload_result['public_id'],
+            'resource_type': resource_type,
+            'format': upload_result['format']
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/delete-upload', methods=['POST'])
+def delete_upload():
+    """Delete file from Cloudinary"""
+    data = request.json
+    public_id = data.get('public_id')
+    resource_type = data.get('resource_type', 'image')
+    
+    if not public_id:
+        return jsonify({'error': 'No public_id provided'}), 400
+    
+    try:
+        result = cloudinary.uploader.destroy(public_id, resource_type=resource_type)
+        return jsonify({'message': 'File deleted', 'result': result}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():

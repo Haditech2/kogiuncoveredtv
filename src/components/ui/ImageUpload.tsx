@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Button } from './button';
 import { Image, Upload, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { api } from '@/lib/api';
 
 interface ImageUploadProps {
   value?: string;
@@ -10,6 +11,7 @@ interface ImageUploadProps {
   disabled?: boolean;
   className?: string;
   label?: string;
+  acceptVideo?: boolean;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -18,38 +20,48 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   disabled,
   className,
   label = 'Upload an image',
+  acceptVideo = false,
 }) => {
   const [preview, setPreview] = useState<string | undefined>(value);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
 
       setIsUploading(true);
+      setUploadProgress(0);
       
-      // In a real app, you would upload the file to a server here
-      // For demo purposes, we'll just create a local URL
-      const fileUrl = URL.createObjectURL(file);
-      setPreview(fileUrl);
-      onChange(fileUrl);
-      
-      // Simulate upload delay
-      setTimeout(() => {
+      try {
+        // Upload to Cloudinary via backend
+        const result = await api.uploadFile(file);
+        setPreview(result.url);
+        onChange(result.url);
+        setUploadProgress(100);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        alert('Failed to upload file. Please try again.');
+      } finally {
         setIsUploading(false);
-      }, 1000);
+        setUploadProgress(0);
+      }
     },
     [onChange]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
+    accept: acceptVideo ? {
+      'image/*': ['.jpeg', '.jpg', '.png', '.webp', '.gif'],
+      'video/*': ['.mp4', '.mov', '.avi', '.mkv', '.webm'],
+    } : {
       'image/*': ['.jpeg', '.jpg', '.png', '.webp', '.gif'],
     },
     disabled: disabled || isUploading,
     multiple: false,
+    maxSize: 10 * 1024 * 1024, // 10MB
   });
 
   const removeImage = (e: React.MouseEvent) => {
@@ -57,6 +69,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setPreview(undefined);
     onChange('');
   };
+
+  const isVideo = preview && (preview.includes('.mp4') || preview.includes('.mov') || preview.includes('.webm'));
 
   return (
     <div className={cn('w-full', className)}>
@@ -74,11 +88,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         {preview ? (
           <div className="relative group">
             <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
-              <img
-                src={preview}
-                alt="Preview"
-                className="object-cover w-full h-full"
-              />
+              {isVideo ? (
+                <video
+                  src={preview}
+                  controls
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="object-cover w-full h-full"
+                />
+              )}
               <button
                 type="button"
                 onClick={removeImage}
@@ -95,9 +117,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         ) : (
           <div className="flex flex-col items-center justify-center space-y-2">
             {isUploading ? (
-              <div className="animate-pulse flex flex-col items-center">
-                <div className="h-12 w-12 bg-muted-foreground/20 rounded-full mb-2"></div>
-                <p className="text-sm text-muted-foreground">Uploading...</p>
+              <div className="flex flex-col items-center">
+                <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-2"></div>
+                <p className="text-sm text-muted-foreground">Uploading to Cloudinary...</p>
+                {uploadProgress > 0 && (
+                  <p className="text-xs text-muted-foreground">{uploadProgress}%</p>
+                )}
               </div>
             ) : (
               <>
@@ -107,11 +132,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 <p className="text-sm font-medium">{label}</p>
                 <p className="text-xs text-muted-foreground">
                   {isDragActive
-                    ? 'Drop the image here'
-                    : 'Drag & drop an image here, or click to select'}
+                    ? `Drop the ${acceptVideo ? 'file' : 'image'} here`
+                    : `Drag & drop ${acceptVideo ? 'an image or video' : 'an image'} here, or click to select`}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Recommended: 1200x630px (16:9 aspect ratio)
+                  {acceptVideo ? 'Max size: 10MB' : 'Recommended: 1200x630px (16:9 aspect ratio)'}
                 </p>
               </>
             )}

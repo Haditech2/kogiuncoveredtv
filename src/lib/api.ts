@@ -46,4 +46,28 @@ export const api = {
     if (!response.ok) throw new Error('Failed to search posts');
     return response.json();
   },
+
+  async uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_URL}/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error('Failed to upload file');
+    return response.json();
+  },
+
+  async deleteUpload(publicId: string, resourceType: string = 'image') {
+    const response = await fetch(`${API_URL}/delete-upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ public_id: publicId, resource_type: resourceType }),
+    });
+
+    if (!response.ok) throw new Error('Failed to delete file');
+    return response.json();
+  },
 };
