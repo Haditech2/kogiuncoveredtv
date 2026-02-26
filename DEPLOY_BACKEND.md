@@ -23,20 +23,25 @@ Click "Add" for each variable:
 
 ```
 DATABASE_URL
-postgresql://neondb_owner:npg_LW7PGxMprqZ0@ep-misty-mouse-air5052r-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require
+<your-neon-postgres-connection-string>
 
 CLOUDINARY_CLOUD_NAME
-ded3xrpof
+<your-cloudinary-cloud-name>
 
 CLOUDINARY_API_KEY
-724112677748272
+<your-cloudinary-api-key>
 
 CLOUDINARY_API_SECRET
-DTIYizyqgyO9bNgvKNNRAeNvZEA
+<your-cloudinary-api-secret>
 
 SECRET_KEY
-kogiuncovered-secret-key-2024
+<your-secret-key>
 ```
+
+**Note:** Get your actual values from:
+- Neon Dashboard for DATABASE_URL
+- Cloudinary Dashboard for Cloudinary credentials
+- Generate a random string for SECRET_KEY
 
 ### 5. Deploy
 Click "Deploy" button and wait 1-2 minutes
