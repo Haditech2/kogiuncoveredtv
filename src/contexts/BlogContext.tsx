@@ -202,6 +202,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        // Clear old localStorage data
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('blogPosts');
+        }
+        
         const data = await api.getPosts();
         setPosts(data);
       } catch (error) {
