@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { api } from '@/lib/api';
 
 export interface Comment {
   id: string;
@@ -27,12 +28,13 @@ export interface BlogPost {
 
 interface BlogContextType {
   posts: BlogPost[];
-  addPost: (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => void;
-  editPost: (id: string, updatedPost: Partial<BlogPost>) => void;
+  loading: boolean;
+  addPost: (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => Promise<void>;
+  editPost: (id: string, updatedPost: Partial<BlogPost>) => Promise<void>;
   getPostBySlug: (slug: string) => BlogPost | undefined;
-  searchPosts: (query: string) => BlogPost[];
-  addComment: (postId: string, comment: Omit<Comment, 'id' | 'date'>) => void;
-  toggleLike: (postId: string, userId: string) => void;
+  searchPosts: (query: string) => Promise<BlogPost[]>;
+  addComment: (postId: string, comment: Omit<Comment, 'id' | 'date'>) => Promise<void>;
+  toggleLike: (postId: string, userId: string) => Promise<void>;
 }
 
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
@@ -193,33 +195,28 @@ With its rich cultural heritage, natural attractions, and warm hospitality, Kogi
 ];
 
 export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [posts, setPosts] = useState<BlogPost[]>(() => {
-    // Load posts from localStorage or use initial posts
-    const savedPosts = typeof window !== 'undefined' ? localStorage.getItem('blogPosts') : null;
-    const parsedPosts: unknown = savedPosts ? JSON.parse(savedPosts) : initialPosts;
-    const postsToNormalize = Array.isArray(parsedPosts) ? parsedPosts : initialPosts;
-    
-    // Ensure all posts have likes and comments arrays
-    return postsToNormalize.map((post) => {
-      const normalizedPost = post as Partial<BlogPost>;
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-      return {
-        ...normalizedPost,
-        likes: normalizedPost.likes || [],
-        comments: normalizedPost.comments || [],
-        authorId: normalizedPost.authorId || '1' // Default author ID
-      } as BlogPost;
-    });
-  });
-
-  // Save posts to localStorage whenever they change (use same key as initial load)
+  // Fetch posts from API on mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('blogPosts', JSON.stringify(posts));
-    }
-  }, [posts]);
+    const fetchPosts = async () => {
+      try {
+        const data = await api.getPosts();
+        setPosts(data);
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+        // Fallback to initial posts if API fails
+        setPosts(initialPosts);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const addPost = (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => {
+    fetchPosts();
+  }, []);
+
+  const addPost = async (post: Omit<BlogPost, 'id' | 'date' | 'slug' | 'likes' | 'comments'>) => {
     const slug = post.title
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
@@ -238,88 +235,102 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({ children
       comments: [],
     };
 
-    setPosts(prevPosts => [newPost, ...prevPosts]);
+    try {
+      const createdPost = await api.createPost(newPost);
+      setPosts(prevPosts => [createdPost, ...prevPosts]);
+    } catch (error) {
+      console.error('Failed to create post:', error);
+      throw error;
+    }
   };
 
   const getPostBySlug = (slug: string) => {
     return posts.find(post => post.slug === slug);
   };
 
-  const editPost = (id: string, updatedPost: Partial<BlogPost>) => {
-    setPosts(prevPosts => 
-      prevPosts.map(post => 
-        post.id === id ? { ...post, ...updatedPost } : post
-      )
-    );
+  const editPost = async (id: string, updatedPost: Partial<BlogPost>) => {
+    try {
+      const updated = await api.updatePost(id, updatedPost);
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post.id === id ? updated : post
+        )
+      );
+    } catch (error) {
+      console.error('Failed to update post:', error);
+      throw error;
+    }
   };
 
-  const searchPosts = (query: string) => {
+  const searchPosts = async (query: string) => {
     if (!query.trim()) return [];
-    const searchTerm = query.toLowerCase();
-    return posts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(searchTerm) ||
-        post.excerpt.toLowerCase().includes(searchTerm) ||
-        post.content.toLowerCase().includes(searchTerm) ||
-        post.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
-    );
+    try {
+      return await api.searchPosts(query);
+    } catch (error) {
+      console.error('Failed to search posts:', error);
+      // Fallback to local search
+      const searchTerm = query.toLowerCase();
+      return posts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm) ||
+          post.excerpt.toLowerCase().includes(searchTerm) ||
+          post.content.toLowerCase().includes(searchTerm) ||
+          post.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      );
+    }
   };
 
-  const addComment = (postId: string, comment: Omit<Comment, 'id' | 'date'>) => {
-    setPosts(prevPosts => {
-      const updatedPosts = prevPosts.map(post => {
-        if (post.id === postId) {
-          const newComment: Comment = {
-            ...comment,
-            id: uuidv4(),
-            date: new Date().toISOString(),
-          };
-          return {
-            ...post,
-            comments: [...(post.comments || []), newComment],
-          };
-        }
-        return post;
-      });
-      
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts));
-      }
-      
-      return updatedPosts;
-    });
+  const addComment = async (postId: string, comment: Omit<Comment, 'id' | 'date'>) => {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const newComment: Comment = {
+      ...comment,
+      id: uuidv4(),
+      date: new Date().toISOString(),
+    };
+
+    const updatedComments = [...(post.comments || []), newComment];
+
+    try {
+      await api.updatePost(postId, { comments: updatedComments });
+      setPosts(prevPosts =>
+        prevPosts.map(p =>
+          p.id === postId ? { ...p, comments: updatedComments } : p
+        )
+      );
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+      throw error;
+    }
   };
 
-  const toggleLike = (postId: string, userId: string) => {
-    setPosts(prevPosts => {
-      const updatedPosts = prevPosts.map(post => {
-        if (post.id === postId) {
-          const isLiked = post.likes?.includes(userId) || false;
-          const updatedLikes = isLiked
-            ? post.likes?.filter(id => id !== userId) || []
-            : [...(post.likes || []), userId];
-            
-          return {
-            ...post,
-            likes: updatedLikes,
-          };
-        }
-        return post;
-      });
-      
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('blogPosts', JSON.stringify(updatedPosts));
-      }
-      
-      return updatedPosts;
-    });
+  const toggleLike = async (postId: string, userId: string) => {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const isLiked = post.likes?.includes(userId) || false;
+    const updatedLikes = isLiked
+      ? post.likes?.filter(id => id !== userId) || []
+      : [...(post.likes || []), userId];
+
+    try {
+      await api.updatePost(postId, { likes: updatedLikes });
+      setPosts(prevPosts =>
+        prevPosts.map(p =>
+          p.id === postId ? { ...p, likes: updatedLikes } : p
+        )
+      );
+    } catch (error) {
+      console.error('Failed to toggle like:', error);
+      throw error;
+    }
   };
 
   return (
     <BlogContext.Provider value={{ 
-      posts, 
+      posts,
+      loading,
       addPost, 
       editPost, 
       getPostBySlug, 

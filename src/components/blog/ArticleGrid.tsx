@@ -5,11 +5,19 @@ import { useBlog } from '@/contexts/BlogContext';
 
 
 export const ArticleGrid: React.FC = () => {
-  const { posts } = useBlog();
+  const { posts, loading } = useBlog();
 
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+
+  if (loading) {
+    return (
+      <div className="col-span-3 text-center py-12">
+        <h3 className="text-xl font-medium">Loading articles...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

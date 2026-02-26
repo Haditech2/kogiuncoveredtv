@@ -41,7 +41,7 @@ const CreatePost: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!title || !content || !excerpt) {
@@ -53,23 +53,31 @@ const CreatePost: React.FC = () => {
       return;
     }
 
-    // Add the post to our context (id, date, slug are set by BlogContext)
-    addPost({
-      title,
-      excerpt,
-      content,
-      author: 'Current User',
-      authorId: '1',
-      readTime: `${Math.max(1, Math.ceil(content.length / 1000))} min read`,
-      tags: tags.length > 0 ? tags : ['Uncategorized'],
-      imageUrl: featuredImage || 'https://source.unsplash.com/random/800x600/?blog',
-    });
+    try {
+      // Add the post to our context (id, date, slug are set by BlogContext)
+      await addPost({
+        title,
+        excerpt,
+        content,
+        author: 'Current User',
+        authorId: '1',
+        readTime: `${Math.max(1, Math.ceil(content.length / 1000))} min read`,
+        tags: tags.length > 0 ? tags : ['Uncategorized'],
+        imageUrl: featuredImage || 'https://source.unsplash.com/random/800x600/?blog',
+      });
 
-    toast({
-      title: 'Success!',
-      description: 'Your post has been published',
-    });
-    navigate('/articles');
+      toast({
+        title: 'Success!',
+        description: 'Your post has been published',
+      });
+      navigate('/articles');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to publish post. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
