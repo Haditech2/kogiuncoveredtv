@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms of Service - Kogiuncovered TV{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-5xl font-bold mb-6">Terms of Service</h1>
+        <p class="text-sm text-gray-500 mb-8">Last updated: {{ "now"|date:"F d, Y" }}</p>
+        
+        <div class="prose prose-lg max-w-none">
+            <h2 class="text-3xl font-bold mt-8 mb-4">Agreement to Terms</h2>
+            <p>
+                By accessing and using Kogiuncovered TV, you accept and agree to be bound by the terms and provision of this agreement.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Use License</h2>
+            <p>
+                Permission is granted to temporarily access the materials (information or software) on Kogiuncovered TV's website 
+                for personal, non-commercial transitory viewing only.
+            </p>
+            <p>This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>Modify or copy the materials</li>
+                <li>Use the materials for any commercial purpose</li>
+                <li>Attempt to decompile or reverse engineer any software contained on the website</li>
+                <li>Remove any copyright or other proprietary notations from the materials</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">User Content</h2>
+            <p>
+                Our website may allow you to post, link, store, share and otherwise make available certain information, 
+                text, graphics, or other material ("Content"). You are responsible for the Content that you post.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Prohibited Uses</h2>
+            <p>You may not use our website:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>In any way that violates any applicable law or regulation</li>
+                <li>To transmit any advertising or promotional material</li>
+                <li>To impersonate or attempt to impersonate the Company or another user</li>
+                <li>To engage in any conduct that restricts or inhibits anyone's use of the website</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Disclaimer</h2>
+            <p>
+                The materials on Kogiuncovered TV's website are provided on an 'as is' basis. Kogiuncovered TV makes no warranties, 
+                expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, 
+                implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement 
+                of intellectual property or other violation of rights.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Limitations</h2>
+            <p>
+                In no event shall Kogiuncovered TV or its suppliers be liable for any damages (including, without limitation, 
+                damages for loss of data or profit, or due to business interruption) arising out of the use or inability to 
+                use the materials on Kogiuncovered TV's website.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Revisions</h2>
+            <p>
+                The materials appearing on Kogiuncovered TV's website could include technical, typographical, or photographic errors. 
+                Kogiuncovered TV does not warrant that any of the materials on its website are accurate, complete or current.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Links</h2>
+            <p>
+                Kogiuncovered TV has not reviewed all of the sites linked to its website and is not responsible for the contents 
+                of any such linked site. The inclusion of any link does not imply endorsement by Kogiuncovered TV of the site.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Modifications</h2>
+            <p>
+                Kogiuncovered TV may revise these terms of service for its website at any time without notice. 
+                By using this website you are agreeing to be bound by the then current version of these terms of service.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Contact Us</h2>
+            <p>
+                If you have any questions about these Terms, please contact us through our 
+                <a href="{% url 'contact' %}" class="text-blue-600 hover:underline">contact page</a>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

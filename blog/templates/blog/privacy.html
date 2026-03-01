@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - Kogiuncovered TV{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-5xl font-bold mb-6">Privacy Policy</h1>
+        <p class="text-sm text-gray-500 mb-8">Last updated: {{ "now"|date:"F d, Y" }}</p>
+        
+        <div class="prose prose-lg max-w-none">
+            <h2 class="text-3xl font-bold mt-8 mb-4">Introduction</h2>
+            <p>
+                Welcome to Kogiuncovered TV. We respect your privacy and are committed to protecting your personal data. 
+                This privacy policy will inform you about how we look after your personal data when you visit our website.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Information We Collect</h2>
+            <p>We may collect, use, store and transfer different kinds of personal data about you including:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li><strong>Identity Data:</strong> Name, username</li>
+                <li><strong>Contact Data:</strong> Email address</li>
+                <li><strong>Technical Data:</strong> IP address, browser type, device information</li>
+                <li><strong>Usage Data:</strong> Information about how you use our website</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">How We Use Your Information</h2>
+            <p>We use your personal data for the following purposes:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>To provide and maintain our service</li>
+                <li>To notify you about changes to our service</li>
+                <li>To provide customer support</li>
+                <li>To gather analysis or valuable information to improve our service</li>
+                <li>To monitor the usage of our service</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Cookies</h2>
+            <p>
+                We use cookies and similar tracking technologies to track activity on our website and hold certain information. 
+                You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Third-Party Services</h2>
+            <p>We may employ third-party companies and individuals to facilitate our service, including:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>Google AdSense for advertising</li>
+                <li>Cloudinary for image hosting</li>
+                <li>Analytics services</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Data Security</h2>
+            <p>
+                We have implemented appropriate security measures to prevent your personal data from being accidentally lost, 
+                used, or accessed in an unauthorized way.
+            </p>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Your Rights</h2>
+            <p>Under data protection laws, you have rights including:</p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>The right to access your personal data</li>
+                <li>The right to rectification</li>
+                <li>The right to erasure</li>
+                <li>The right to restrict processing</li>
+                <li>The right to data portability</li>
+            </ul>
+            
+            <h2 class="text-3xl font-bold mt-8 mb-4">Contact Us</h2>
+            <p>
+                If you have any questions about this Privacy Policy, please contact us through our 
+                <a href="{% url 'contact' %}" class="text-blue-600 hover:underline">contact page</a>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
