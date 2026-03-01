@@ -10,6 +10,7 @@ urlpatterns = [
     path('dashboard/messages/', views.view_messages, name='view_messages'),
     path('dashboard/messages/<int:message_id>/', views.message_detail, name='message_detail'),
     path('dashboard/messages/<int:message_id>/delete/', views.delete_message, name='delete_message'),
+    path('dashboard/change-password/', views.change_password, name='change_password'),
     path('create-post/', views.create_post, name='create_post'),
     path('edit-post/<slug:slug>/', views.edit_post, name='edit_post'),
     path('delete-post/<slug:slug>/', views.delete_post, name='delete_post'),

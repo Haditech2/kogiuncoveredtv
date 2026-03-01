@@ -5,19 +5,91 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Admin Dashboard</h1>
-        <p class="text-gray-600">Manage all blog posts</p>
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-bold mb-2">Admin Dashboard</h1>
+            <p class="text-gray-600">Manage all blog posts and view statistics</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'change_password' %}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition">
+                Change Password
+            </a>
+            <a href="{% url 'create_post' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                Create New Post
+            </a>
+        </div>
     </div>
 
-    <div class="mb-4 flex justify-between items-center">
-        <p class="text-sm text-gray-600">
-            Total Posts: {{ total_posts }}
-        </p>
-        <a href="{% url 'create_post' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-            Create New Post
-        </a>
+    <!-- Statistics Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Views</p>
+                    <p class="text-3xl font-bold text-blue-600">{{ total_views|default:0 }}</p>
+                </div>
+                <svg class="h-12 w-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">All time page views</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Views Today</p>
+                    <p class="text-3xl font-bold text-green-600">{{ views_today|default:0 }}</p>
+                </div>
+                <svg class="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Last 7 days: {{ views_7_days|default:0 }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Unique Visitors</p>
+                    <p class="text-3xl font-bold text-purple-600">{{ unique_visitors_today|default:0 }}</p>
+                </div>
+                <svg class="h-12 w-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Today's unique visitors</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Posts</p>
+                    <p class="text-3xl font-bold text-orange-600">{{ total_posts|default:0 }}</p>
+                </div>
+                <svg class="h-12 w-12 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Published articles</p>
+        </div>
     </div>
+
+    <!-- Popular Pages -->
+    {% if popular_pages %}
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-bold mb-4">Most Viewed Pages</h2>
+        <div class="space-y-3">
+            {% for page in popular_pages|slice:":5" %}
+            <div class="flex justify-between items-center py-2 border-b">
+                <span class="text-sm text-gray-700">{{ page.page_url }}</span>
+                <span class="text-sm font-semibold text-blue-600">{{ page.view_count }} views</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200">

@@ -4,7 +4,11 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from .models import Post, Comment, Like, ContactMessage
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.utils import timezone
+from datetime import timedelta
+from .models import Post, Comment, Like, ContactMessage, PageView
 from .forms import PostForm, CommentForm, ContactForm
 
 
@@ -82,10 +86,35 @@ def admin_dashboard(request):
     posts = Post.objects.all().order_by('-created_at')
     unread_messages = ContactMessage.objects.filter(read=False).count()
     
+    # Statistics
+    today = timezone.now().date()
+    last_7_days = today - timedelta(days=7)
+    last_30_days = today - timedelta(days=30)
+    
+    total_views = PageView.objects.count()
+    views_today = PageView.objects.filter(created_at__date=today).count()
+    views_7_days = PageView.objects.filter(created_at__date__gte=last_7_days).count()
+    views_30_days = PageView.objects.filter(created_at__date__gte=last_30_days).count()
+    
+    unique_visitors_today = PageView.objects.filter(created_at__date=today).values('user_ip').distinct().count()
+    unique_visitors_7_days = PageView.objects.filter(created_at__date__gte=last_7_days).values('user_ip').distinct().count()
+    
+    # Most viewed pages
+    popular_pages = PageView.objects.values('page_url').annotate(
+        view_count=Count('id')
+    ).order_by('-view_count')[:10]
+    
     context = {
         'posts': posts,
         'total_posts': posts.count(),
         'unread_messages': unread_messages,
+        'total_views': total_views,
+        'views_today': views_today,
+        'views_7_days': views_7_days,
+        'views_30_days': views_30_days,
+        'unique_visitors_today': unique_visitors_today,
+        'unique_visitors_7_days': unique_visitors_7_days,
+        'popular_pages': popular_pages,
     }
     return render(request, 'blog/admin_dashboard.html', context)
 
@@ -273,3 +302,26 @@ def privacy_policy(request):
 def terms_of_service(request):
     """Terms of service page"""
     return render(request, 'blog/terms.html')
+
+
+
+@login_required
+def change_password(request):
+    """Change admin password"""
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'blog/change_password.html', {'form': form})

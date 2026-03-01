@@ -77,3 +77,21 @@ class ContactMessage(models.Model):
         
     def __str__(self):
         return f'Message from {self.name} - {self.subject}'
+
+
+class PageView(models.Model):
+    page_url = models.CharField(max_length=500)
+    user_ip = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True)
+    referrer = models.CharField(max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['page_url']),
+        ]
+        
+    def __str__(self):
+        return f'{self.page_url} - {self.created_at}'
