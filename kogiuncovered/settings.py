@@ -58,10 +58,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kogiuncovered.wsgi.application'
 
 # Database
+# Vercel provides POSTGRES_URL, fallback to DATABASE_URL, then SQLite for local dev
+DATABASE_URL = os.getenv('POSTGRES_URL') or os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600
+        default=DATABASE_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
