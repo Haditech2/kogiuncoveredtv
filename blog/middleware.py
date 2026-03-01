@@ -9,7 +9,12 @@ class PageViewMiddleware:
         response = self.get_response(request)
         
         # Track page views for successful GET requests
-        if request.method == 'GET' and response.status_code == 200:
+        # Exclude admin/staff users and admin pages
+        if (request.method == 'GET' and 
+            response.status_code == 200 and 
+            not request.user.is_authenticated and
+            not request.path.startswith('/dashboard/')):
+            
             # Get client IP
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
