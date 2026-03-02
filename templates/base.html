@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,9 +133,11 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="{% url 'home' %}" class="flex items-center space-x-3">
-                        <img src="{% static 'logo.png' %}" alt="Kogi Uncovered Logo" class="h-10 w-auto">
-                        <span class="text-xl md:text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent hidden sm:inline">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">K</span>
+                        </div>
+                        <span class="text-xl md:text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
                             Kogiuncovered TV
                         </span>
                     </a>
@@ -263,8 +266,10 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <!-- Brand Section -->
                 <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="{% static 'logo.png' %}" alt="Kogi Uncovered Logo" class="h-10 w-auto brightness-0 invert">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                            <span class="text-gray-900 font-bold text-xl">K</span>
+                        </div>
                         <h3 class="text-xl font-bold">Kogiuncovered TV</h3>
                     </div>
                     <p class="text-teal-100 leading-relaxed">Discover the latest news, stories, and insights from Kogi State and beyond.</p>
