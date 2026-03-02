@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from .models import Post, Comment, Like, ContactMessage, PageView
