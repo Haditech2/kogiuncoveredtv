@@ -9,8 +9,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
-from .models import Post, Comment, Like, ContactMessage, PageView
-from .forms import PostForm, CommentForm, ContactForm
+from .models import Post, Comment, Like, ContactMessage, PageView, PostAttachment
+from .forms import PostForm, CommentForm, ContactForm, PostAttachmentForm
 
 
 def get_client_ip(request):
@@ -185,6 +185,26 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            
+            # Handle attachments
+            attachment_count = int(request.POST.get('attachment_count', 0))
+            for i in range(attachment_count):
+                title = request.POST.get(f'attachment_title_{i}')
+                file_type = request.POST.get(f'attachment_type_{i}')
+                file_size = request.POST.get(f'attachment_size_{i}')
+                description = request.POST.get(f'attachment_description_{i}')
+                file = request.FILES.get(f'attachment_file_{i}')
+                
+                if title and file:
+                    PostAttachment.objects.create(
+                        post=post,
+                        title=title,
+                        file=file,
+                        file_type=file_type or 'other',
+                        file_size=file_size or '',
+                        description=description or ''
+                    )
+            
             messages.success(request, 'Post created successfully!')
             return redirect('admin_dashboard')
     else:
@@ -207,12 +227,36 @@ def edit_post(request, slug):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
+            
+            # Handle new attachments
+            attachment_count = int(request.POST.get('attachment_count', 0))
+            for i in range(attachment_count):
+                title = request.POST.get(f'attachment_title_{i}')
+                file_type = request.POST.get(f'attachment_type_{i}')
+                file_size = request.POST.get(f'attachment_size_{i}')
+                description = request.POST.get(f'attachment_description_{i}')
+                file = request.FILES.get(f'attachment_file_{i}')
+                
+                if title and file:
+                    PostAttachment.objects.create(
+                        post=post,
+                        title=title,
+                        file=file,
+                        file_type=file_type or 'other',
+                        file_size=file_size or '',
+                        description=description or ''
+                    )
+            
             messages.success(request, 'Post updated successfully!')
             return redirect('admin_dashboard')
     else:
         form = PostForm(instance=post)
     
-    context = {'form': form, 'post': post}
+    context = {
+        'form': form,
+        'post': post,
+        'attachments': post.attachments.all()
+    }
     return render(request, 'blog/edit_post.html', context)
 
 
@@ -386,7 +430,6 @@ def delete_staff(request, user_id):
 
 def download_attachment(request, attachment_id):
     """Track and redirect to attachment download"""
-    from .models import PostAttachment
     attachment = get_object_or_404(PostAttachment, id=attachment_id)
     
     # Increment download count
@@ -394,3 +437,21 @@ def download_attachment(request, attachment_id):
     
     # Redirect to Cloudinary URL
     return redirect(attachment.file.url)
+
+
+@login_required
+def delete_attachment(request, attachment_id):
+    """Delete an attachment (admin only)"""
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete attachments.')
+        return redirect('home')
+    
+    attachment = get_object_or_404(PostAttachment, id=attachment_id)
+    post_slug = attachment.post.slug
+    
+    if request.method == 'POST':
+        attachment.delete()
+        messages.success(request, 'Attachment deleted successfully!')
+        return redirect('edit_post', slug=post_slug)
+    
+    return redirect('edit_post', slug=post_slug)

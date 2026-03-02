@@ -19,6 +19,7 @@ urlpatterns = [
     path('delete-post/<slug:slug>/', views.delete_post, name='delete_post'),
     path('like/<slug:slug>/', views.toggle_like, name='toggle_like'),
     path('download/<int:attachment_id>/', views.download_attachment, name='download_attachment'),
+    path('attachment/<int:attachment_id>/delete/', views.delete_attachment, name='delete_attachment'),
     path('search/', views.search, name='search'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
