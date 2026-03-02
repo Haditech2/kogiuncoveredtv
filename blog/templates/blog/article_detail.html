@@ -77,17 +77,11 @@
         <!-- Video Embed -->
         {% if post.video_url %}
         <div class="mt-8">
-            <div class="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden">
-                {% if 'youtube.com' in post.video_url or 'youtu.be' in post.video_url %}
-                    <iframe src="{{ post.video_url|replace:'watch?v=':'embed/' }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-96"></iframe>
-                {% elif 'vimeo.com' in post.video_url %}
-                    <iframe src="{{ post.video_url|replace:'vimeo.com/':'player.vimeo.com/video/' }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen class="w-full h-96"></iframe>
-                {% else %}
-                    <video controls class="w-full h-96">
-                        <source src="{{ post.video_url }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                {% endif %}
+            <div class="bg-gray-100 rounded-lg p-4">
+                <p class="text-sm text-gray-600 mb-2">Video Link:</p>
+                <a href="{{ post.video_url }}" target="_blank" class="text-blue-600 hover:underline break-all">
+                    {{ post.video_url }}
+                </a>
             </div>
         </div>
         {% endif %}
