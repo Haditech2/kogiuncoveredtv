@@ -381,3 +381,16 @@ def delete_staff(request, user_id):
         return redirect('manage_staff')
     
     return render(request, 'blog/delete_staff_confirm.html', {'staff_user': staff_user})
+
+
+
+def download_attachment(request, attachment_id):
+    """Track and redirect to attachment download"""
+    from .models import PostAttachment
+    attachment = get_object_or_404(PostAttachment, id=attachment_id)
+    
+    # Increment download count
+    attachment.increment_download()
+    
+    # Redirect to Cloudinary URL
+    return redirect(attachment.file.url)

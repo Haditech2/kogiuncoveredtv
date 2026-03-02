@@ -11,6 +11,10 @@ class Post(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     featured_image = CloudinaryField('image', blank=True, null=True)
+    
+    # Video field
+    video_url = models.URLField(max_length=500, blank=True, help_text='YouTube or Vimeo URL')
+    
     tags = models.CharField(max_length=200, help_text='Comma-separated tags')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -34,6 +38,36 @@ class Post(models.Model):
         words = len(self.content.split())
         minutes = max(1, words // 200)
         return f"{minutes} min read"
+
+
+class PostAttachment(models.Model):
+    """Downloadable attachments for posts"""
+    ATTACHMENT_TYPES = [
+        ('pdf', 'PDF Document'),
+        ('doc', 'Word Document'),
+        ('video', 'Video File'),
+        ('audio', 'Audio File'),
+        ('other', 'Other'),
+    ]
+    
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='attachments')
+    title = models.CharField(max_length=200, help_text='Display name for the attachment')
+    file = CloudinaryField('raw', resource_type='auto')
+    file_type = models.CharField(max_length=10, choices=ATTACHMENT_TYPES, default='pdf')
+    file_size = models.CharField(max_length=50, blank=True, help_text='e.g., 2.5 MB')
+    description = models.TextField(blank=True, help_text='Optional description')
+    download_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['created_at']
+    
+    def __str__(self):
+        return f'{self.title} - {self.post.title}'
+    
+    def increment_download(self):
+        self.download_count += 1
+        self.save(update_fields=['download_count'])
 
 
 class Comment(models.Model):

@@ -1,19 +1,33 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Post, Comment, ContactMessage
+from .models import Post, Comment, ContactMessage, PostAttachment
 from .widgets import QuillEditorWidget
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'excerpt', 'content', 'featured_image', 'tags', 'published']
+        fields = ['title', 'excerpt', 'content', 'featured_image', 'video_url', 'tags', 'published']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'}),
             'excerpt': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'rows': 3}),
             'content': QuillEditorWidget(),
+            'video_url': forms.URLInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'placeholder': 'https://youtube.com/watch?v=...'}),
             'tags': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'placeholder': 'Comma-separated tags'}),
             'published': forms.CheckboxInput(attrs={'class': 'w-4 h-4 text-blue-600'}),
+        }
+
+
+class PostAttachmentForm(forms.ModelForm):
+    """Form for adding attachments to posts"""
+    class Meta:
+        model = PostAttachment
+        fields = ['title', 'file', 'file_type', 'file_size', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'placeholder': 'e.g., Annual Report 2024'}),
+            'file_type': forms.Select(attrs={'class': 'w-full px-4 py-2 border rounded-lg'}),
+            'file_size': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'placeholder': 'e.g., 2.5 MB'}),
+            'description': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'rows': 2, 'placeholder': 'Optional description'}),
         }
 
 
