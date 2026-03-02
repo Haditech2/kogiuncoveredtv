@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Staff Member - Kogi Uncovered{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold mb-6">Create New Staff Member</h1>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <ul class="list-disc list-inside">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Username *
+                </label>
+                {{ form.username }}
+                <p class="mt-1 text-sm text-gray-500">Unique username for login</p>
+            </div>
+            
+            <div>
+                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Email *
+                </label>
+                {{ form.email }}
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        First Name
+                    </label>
+                    {{ form.first_name }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name
+                    </label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+            
+            <div>
+                <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Password *
+                </label>
+                {{ form.password }}
+                <p class="mt-1 text-sm text-gray-500">{{ form.password.help_text }}</p>
+            </div>
+            
+            <div class="flex gap-4 pt-4">
+                <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                    Create Staff Member
+                </button>
+                <a href="{% url 'manage_staff' %}" class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition text-center">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

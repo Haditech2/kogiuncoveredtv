@@ -1,6 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import Post, Comment, ContactMessage
-from .widgets import QuillEditorWidget
 
 
 class PostForm(forms.ModelForm):
@@ -8,23 +8,11 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'excerpt', 'content', 'featured_image', 'tags', 'published']
         widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter a compelling title'
-            }),
-            'excerpt': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'A brief summary (150-160 characters)'
-            }),
-            'content': QuillEditorWidget(),
-            'tags': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Comma-separated tags (e.g., Culture, News, Politics)'
-            }),
-            'published': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
+            'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'}),
+            'excerpt': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'rows': 3}),
+            'content': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'rows': 15}),
+            'tags': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'placeholder': 'Comma-separated tags'}),
+            'published': forms.CheckboxInput(attrs={'class': 'w-4 h-4 text-blue-600'}),
         }
 
 
@@ -33,19 +21,9 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['author_name', 'author_email', 'content']
         widgets = {
-            'author_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Your name'
-            }),
-            'author_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Your email'
-            }),
-            'content': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 4,
-                'placeholder': 'Write your comment...'
-            }),
+            'author_name': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'placeholder': 'Your Name'}),
+            'author_email': forms.EmailInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'placeholder': 'Your Email'}),
+            'content': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg', 'rows': 4, 'placeholder': 'Your Comment'}),
         }
 
 
@@ -54,21 +32,50 @@ class ContactForm(forms.ModelForm):
         model = ContactMessage
         fields = ['name', 'email', 'subject', 'message']
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500',
-                'placeholder': 'Your Name'
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent', 'placeholder': 'Your Name'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent', 'placeholder': 'Your Email'}),
+            'subject': forms.TextInput(attrs={'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent', 'placeholder': 'Subject'}),
+            'message': forms.Textarea(attrs={'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent', 'rows': 6, 'placeholder': 'Your Message'}),
+        }
+
+
+class StaffUserForm(forms.ModelForm):
+    """Form for creating staff users"""
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+            'placeholder': 'Password'
+        }),
+        help_text='Enter a strong password for the staff member'
+    )
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'Username'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500',
-                'placeholder': 'your.email@example.com'
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'Email'
             }),
-            'subject': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500',
-                'placeholder': 'Subject'
+            'first_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'First Name'
             }),
-            'message': forms.Textarea(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500',
-                'rows': 6,
-                'placeholder': 'Your message...'
+            'last_name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500',
+                'placeholder': 'Last Name'
             }),
         }
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        user.is_staff = True
+        user.is_superuser = False  # Staff but not superuser
+        if commit:
+            user.save()
+        return user

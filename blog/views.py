@@ -307,10 +307,10 @@ def terms_of_service(request):
 
 @login_required
 def change_password(request):
-    """Change admin password"""
-    if not request.user.is_staff:
-        messages.error(request, 'You do not have permission to access this page.')
-        return redirect('home')
+    """Change admin password (superuser only)"""
+    if not request.user.is_superuser:
+        messages.error(request, 'Only administrators can change passwords.')
+        return redirect('admin_dashboard')
     
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -325,3 +325,58 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
     
     return render(request, 'blog/change_password.html', {'form': form})
+
+
+
+@login_required
+def manage_staff(request):
+    """Manage staff users (superuser only)"""
+    if not request.user.is_superuser:
+        messages.error(request, 'Only administrators can manage staff.')
+        return redirect('admin_dashboard')
+    
+    staff_users = User.objects.filter(is_staff=True, is_superuser=False).order_by('-date_joined')
+    
+    context = {
+        'staff_users': staff_users,
+    }
+    return render(request, 'blog/manage_staff.html', context)
+
+
+@login_required
+def create_staff(request):
+    """Create new staff user (superuser only)"""
+    if not request.user.is_superuser:
+        messages.error(request, 'Only administrators can create staff.')
+        return redirect('admin_dashboard')
+    
+    if request.method == 'POST':
+        from .forms import StaffUserForm
+        form = StaffUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Staff member created successfully!')
+            return redirect('manage_staff')
+    else:
+        from .forms import StaffUserForm
+        form = StaffUserForm()
+    
+    return render(request, 'blog/create_staff.html', {'form': form})
+
+
+@login_required
+def delete_staff(request, user_id):
+    """Delete staff user (superuser only)"""
+    if not request.user.is_superuser:
+        messages.error(request, 'Only administrators can delete staff.')
+        return redirect('admin_dashboard')
+    
+    staff_user = get_object_or_404(User, id=user_id, is_staff=True, is_superuser=False)
+    
+    if request.method == 'POST':
+        username = staff_user.username
+        staff_user.delete()
+        messages.success(request, f'Staff member {username} deleted successfully!')
+        return redirect('manage_staff')
+    
+    return render(request, 'blog/delete_staff_confirm.html', {'staff_user': staff_user})
