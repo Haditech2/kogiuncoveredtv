@@ -36,6 +36,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'blog.middleware.PageViewMiddleware',
+    'blog.session_timeout_middleware.AdminSessionTimeoutMiddleware',
 ]
 
 ROOT_URLCONF = 'kogiuncovered.urls'
@@ -108,12 +109,10 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'admin_dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Session settings - Auto logout after 5 minutes of inactivity
-SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
-SESSION_SAVE_EVERY_REQUEST = True  # Reset timeout on every request
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Session expires when browser closes
+# Session settings
 SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to session cookie
 SESSION_COOKIE_SAMESITE = 'Lax'  # CSRF protection
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Allow persistent sessions for regular users
 
 # Security settings for production
 if not DEBUG:
