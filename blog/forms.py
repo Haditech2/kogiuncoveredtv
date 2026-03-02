@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Post, Comment, ContactMessage
+from .widgets import QuillEditorWidget
 
 
 class PostForm(forms.ModelForm):
@@ -10,7 +11,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500'}),
             'excerpt': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'rows': 3}),
-            'content': forms.Textarea(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'rows': 15}),
+            'content': QuillEditorWidget(),
             'tags': forms.TextInput(attrs={'class': 'w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500', 'placeholder': 'Comma-separated tags'}),
             'published': forms.CheckboxInput(attrs={'class': 'w-4 h-4 text-blue-600'}),
         }
